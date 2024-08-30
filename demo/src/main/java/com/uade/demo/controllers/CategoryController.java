@@ -44,7 +44,6 @@ public class CategoryController {
         Optional<Category> result = categoryService.getCategoryById(categoryId);
         if (result.isPresent())
             return ResponseEntity.ok(result.get());
-
         return ResponseEntity.noContent().build();
     }
 

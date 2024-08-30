@@ -1,4 +1,4 @@
-/*package com.uade.demo.entity;
+package com.uade.demo.entity;
 
 import java.util.List;
 
@@ -23,4 +23,4 @@ public class Order {
     private double total;
     @Column
     private String size;
-}*/
+}

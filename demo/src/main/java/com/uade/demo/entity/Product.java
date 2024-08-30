@@ -1,6 +1,7 @@
-/*package com.uade.demo.entity;
+package com.uade.demo.entity;
 
 import java.util.List;
+import java.util.Map;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,11 +21,16 @@ public class Product {
     @Column
     private double price;
     @Column
-    private int stock;
-    @Column
-    private List<String> sizeOptions;
+    private Map<String, Integer> stock; // talle : stock del talle
     @Column
     private String club;
     @Column
     private String league;
-}*/
+
+    public Product(String description, double price, String club, String league){
+        this.description = description;
+        this.price = price;
+        this.club = club;
+        this.league = league;
+    }
+}
