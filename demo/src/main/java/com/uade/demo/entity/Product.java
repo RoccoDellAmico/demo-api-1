@@ -1,6 +1,5 @@
 package com.uade.demo.entity;
 
-import java.util.List;
 import java.util.Map;
 
 import jakarta.persistence.Column;
