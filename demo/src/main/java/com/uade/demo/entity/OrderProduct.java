@@ -25,8 +25,5 @@ public class OrderProduct {
     private Product product;
 
     @Column(nullable = false)
-    private String size;
-
-    @Column(nullable = false)
     private Integer quantity;
 }
