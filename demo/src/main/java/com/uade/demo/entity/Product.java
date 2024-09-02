@@ -31,9 +31,7 @@ public class Product {
     private String league;
 
     @ManyToMany
-    @JoinTable(name = "product_category",
-        joinColumns = @JoinColumn(name = "product_id"),
-        inverseJoinColumns = @JoinColumn(name = "category_id"))
+    @JoinColumn(name = "category_id")
     private List<Category> categories;
 
     public Product(String description, double price, String club, String league){

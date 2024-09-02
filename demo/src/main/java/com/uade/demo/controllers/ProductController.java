@@ -9,6 +9,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.uade.demo.service.ProductService;
+
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,12 +26,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 
 @Controller
-@RequestMapping("products")
+@RequestMapping("/api")
 public class ProductController {
     @Autowired
     private ProductService productService;
 
-    @GetMapping
+    @GetMapping("public/products")
     public ResponseEntity<Page<Product>> getProducts(@RequestParam(required = false) Integer page,
             @RequestParam(required = false) Integer size) {
         if (page == null || size == null)
@@ -37,19 +39,32 @@ public class ProductController {
         return ResponseEntity.ok(productService.getProducts(PageRequest.of(page, size)));
     }
     
-    @GetMapping("/{productId}")
+    @GetMapping("public/products/{productId}")
     public ResponseEntity<Product> getProductById(@PathVariable Long productId) {
         Optional<Product> result = productService.getProductById(productId);
         if(result.isPresent())
             return ResponseEntity.ok(result.get());
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("public/categories/{categoryId}/products")
+    public ResponseEntity<Product> getProduductByCategory(@PathVariable Long categoryId) {
+        Optional<Product> result = productService.getProductByCategory(categoryId);
+        if(result.isPresent())
+            return ResponseEntity.ok(result.get());
+        return ResponseEntity.noContent().build();
+    }
     
-    @PostMapping("path")
+    @PostMapping("/admin/products")
     public ResponseEntity<Object> createProduct(@RequestBody ProductRequest productRequest) {
         Product result = productService.createProduct(productRequest.getDescription(), productRequest.getPrice(), 
             productRequest.getClub(), productRequest.getLeague());
         return ResponseEntity.created(URI.create("/products/" + result.getId())).body(result);
     }
     
+    @DeleteMapping("/admin/products/{productId}")
+    public ResponseEntity<Object> deleteProductById(@PathVariable Long productId) {
+        productService.deleteProduct(productId);
+        return ResponseEntity.noContent().build();
+    }
 }
