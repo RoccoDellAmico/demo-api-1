@@ -84,7 +84,11 @@ public class Cart {
     }
 
     public double getTotal(){
-        return 1000;
+        double total = 0;
+        for(CartProduct cartProduct : cartProducts){
+            total += cartProduct.getProduct().getPrice() * cartProduct.getQuantity();
+        }
+        return total;
     }
 
     public int getItemCount(){
