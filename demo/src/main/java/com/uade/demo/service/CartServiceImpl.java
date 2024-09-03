@@ -1,6 +1,7 @@
 package com.uade.demo.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -133,7 +134,7 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public Cart createCart(String email) throws ItemNotFoundException{
-        User user = userRepository.findByEmail(email);
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new ItemNotFoundException());
         return cartRepository.save(new Cart(user));
     }
 }
