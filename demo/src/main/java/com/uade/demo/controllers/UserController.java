@@ -48,7 +48,7 @@ public class UserController {
     public ResponseEntity<Object> createUser(@RequestBody UserRequest userRequest)
             throws UserDuplicateException {
         User result = userService.createUser(userRequest.getUsername(), userRequest.getPassword(), 
-            userRequest.getName(), userRequest.getSurname(), userRequest.getMail(), userRequest.getRole());
+            userRequest.getName(), userRequest.getSurname(), userRequest.getMail());
         return ResponseEntity.created(URI.create("/users/" + result.getId())).body(result);
     }
 }
