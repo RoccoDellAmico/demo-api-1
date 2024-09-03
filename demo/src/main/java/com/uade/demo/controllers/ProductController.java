@@ -55,12 +55,10 @@ public class ProductController {
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping("public/products/price/{maxPrice}")
-    public ResponseEntity<Product> getProductsByPriceRange(@PathVariable double maxPrice) {
-        Optional<Product> result = productService.getProductsByPriceRange(maxPrice);
-        if(result.isPresent())
-            return ResponseEntity.ok(result.get());
-        return ResponseEntity.noContent().build();
+    @GetMapping("public/products/price/{minPrice}/{maxPrice}")
+    public ResponseEntity<List<Product>> getProductsByPriceRange(@PathVariable double minPrice,  double maxPrice) {
+        List<Product> result = productService.getProductsByPriceRange(minPrice, maxPrice);
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("public/products/league/{league}")

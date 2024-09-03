@@ -34,16 +34,10 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findByCategories(categoryId);
     }
 
-    public Optional<Product> getProductsByPriceRange(double maxPrice) {
-        Optional<Product> products = productRepository.findByPriceBetween(maxPrice);
-
-        if (products.isEmpty()) {
-            return Optional.empty();
-        }
-
+    public List<Product> getProductsByPriceRange(double minPrice, double maxPrice) {
+        List<Product> products = productRepository.findByPriceBetween(minPrice, maxPrice);
         return products;
     }
-
 
     public Optional<Product> getProductsByLeague(String league) {
         Optional<Product> products = productRepository.findByLeague(league);

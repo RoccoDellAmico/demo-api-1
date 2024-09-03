@@ -15,10 +15,11 @@ public interface ProductRepository extends JpaRepository<Product, Long>{
     @Query(value = "select p from Product p where p.id = ?1 and p.stock > 0")
     Optional<Product> findById(Long id);
 
-    @Query(value = "select p from Product p where p.category_id = ?1 and p.stock > 0")
-    List<Product> findByCategories(Long categeoryId);
+    @Query(value = "select p from Product p where p.stock > 0")
+    List<Product> findByCategories(Long categoryId);
 
-    Optional<Product> findByPriceBetween(double maxPrice);
+    @Query(value = "select p from Product p where p.price > ?1 and p.price < ?2")
+    List<Product> findByPriceBetween(double minPrice, double maxPrice);
 
     Optional<Product> findByLeague(String league);
 
