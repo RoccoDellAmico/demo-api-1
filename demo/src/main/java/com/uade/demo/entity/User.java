@@ -13,12 +13,10 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Entity
-@Builder
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,6 +42,17 @@ public class User implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    public User() {}
+
+    public User(String email, String password, String name, String firstName, String lastName, Role role) {
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.role = role;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

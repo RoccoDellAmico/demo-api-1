@@ -1,6 +1,7 @@
 package com.uade.demo.service;
 
 import java.util.Optional;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -29,14 +30,8 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findById(productId);
     }
 
-    public Optional<Product> getProductByCategory(Long categoryId) {
-        Optional<Category> categeory = CategoryRepository.findById(categoryId);
-
-        if (!categeory.isPresent())
-            return Optional.empty();
-
-        return productRepository.findByCategories(categeory);
-
+    public List<Product> getProductByCategory(Long categoryId) {
+        return productRepository.findByCategories(categoryId);
     }
 
     public Optional<Product> getProductsByPriceRange(double maxPrice) {

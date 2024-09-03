@@ -39,7 +39,7 @@ public class CategoryController {
         return ResponseEntity.ok(categoryService.getCategories(PageRequest.of(page, size)));
     }
 
-    @GetMapping("public/categories/{categoryId}")
+    @GetMapping("/public/categories/{categoryId}")
     public ResponseEntity<Category> getCategoryById(@PathVariable Long categoryId) {
         Optional<Category> result = categoryService.getCategoryById(categoryId);
         if (result.isPresent())
