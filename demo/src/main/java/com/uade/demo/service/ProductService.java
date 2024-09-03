@@ -12,5 +12,9 @@ public interface ProductService {
 
     public Optional<Product> getProductById(Long productId);
 
+    public Optional<Product> getProductByCategory(Long categoryId);
+
     public Product createProduct(String description, double price, String club, String league);
+
+    public String deleteProduct(Long productId);
 }

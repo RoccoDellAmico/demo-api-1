@@ -25,12 +25,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController
-@RequestMapping("categories")
+@RequestMapping("/api")
 public class CategoryController {
     @Autowired
     private CategoryService categoryService;
     
-    @GetMapping
+    @GetMapping("/public/categories")
     public ResponseEntity<Page<Category>> getCategories(
             @RequestParam(required = false) Integer page,
             @RequestParam(required = false) Integer size) {
@@ -39,7 +39,7 @@ public class CategoryController {
         return ResponseEntity.ok(categoryService.getCategories(PageRequest.of(page, size)));
     }
 
-    @GetMapping("/{categoryId}")
+    @GetMapping("public/categories/{categoryId}")
     public ResponseEntity<Category> getCategoryById(@PathVariable Long categoryId) {
         Optional<Category> result = categoryService.getCategoryById(categoryId);
         if (result.isPresent())
@@ -47,7 +47,7 @@ public class CategoryController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping
+    @PostMapping("/admin/categories")
     public ResponseEntity<Object> createCategory(@RequestBody CategoryRequest categoryRequest)
             throws CategoryDuplicateException {
         Category result = categoryService.createCategory(categoryRequest.getDescription());

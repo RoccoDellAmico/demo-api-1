@@ -21,12 +21,12 @@ import com.uade.demo.exceptions.UserDuplicateException;
 import com.uade.demo.service.UserService;
 
 @RestController
-@RequestMapping("users")
+@RequestMapping("/api")
 public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping
+    @GetMapping("/admin/users")
     public ResponseEntity<Page<User>> getUsers(
             @RequestParam(required = false) Integer page,
             @RequestParam(required = false) Integer size) {
@@ -35,7 +35,7 @@ public class UserController {
         return ResponseEntity.ok(userService.getUsers(PageRequest.of(page, size)));
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping("/admin/users/{userId}")
     public ResponseEntity<User> getUserById(@PathVariable Long userId) {
         Optional<User> result = userService.getUserById(userId);
         if (result.isPresent())

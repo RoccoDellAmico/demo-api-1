@@ -7,11 +7,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import com.uade.demo.entity.Category;
 import com.uade.demo.entity.Product;
+import com.uade.demo.repository.CategoryRepository;
 import com.uade.demo.repository.ProductRepository;
 
 @Service
 public class ProductServiceImpl implements ProductService {
+
+    @Autowired
+    private CategoryRepository CategoryRepository;
 
     @Autowired
     private ProductRepository productRepository;
@@ -24,7 +29,26 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findById(productId);
     }
 
+    public Optional<Product> getProductByCategory(Long categoryId) {
+        Optional<Category> categeory = CategoryRepository.findById(categoryId);
+
+        if (!categeory.isPresent())
+            return Optional.empty();
+
+        return productRepository.findByCategories(categeory);
+
+    }
+
     public Product createProduct(String description, double price, String club, String league){
         return productRepository.save(new Product(description, price, club, league));
     }
+
+    public String deleteProduct(Long productId) {
+        Product product = productRepository.findById(productId).orElse(null);
+
+        productRepository.delete(product);
+
+        return "Product with productId: " + productId + " deleted successfully !!!";
+    }
+
 }
