@@ -1,5 +1,6 @@
 package com.uade.demo.entity.dto;
 
+import com.uade.demo.entity.Role;
 import lombok.Data;
 
 @Data

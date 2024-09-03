@@ -3,10 +3,13 @@ package com.uade.demo.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import lombok.Data;
 
 @Entity
@@ -16,7 +19,11 @@ public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long cartId;
+
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CartProduct> cartProducts = new ArrayList<>();
+
+    @ManyToOne
     private User user;
 
     public Cart(User user){
@@ -38,8 +45,27 @@ public class Cart {
 
     public void addProduct(CartProduct cartProduct){
         cartProducts.add(cartProduct);
+        cartProduct.setCart(this);
     }
 
+    /* Metodo AddProduct verificando el stock
+    public void addProduct(Product product, Integer quantity, String size) {
+        Integer availableStock = product.getStock().get(size);
+    
+        if (availableStock == null) {
+            System.out.println("El tamaño especificado no está disponible.");
+        } else if (availableStock < quantity) {
+            System.out.println("No hay suficiente stock disponible para la cantidad solicitada.");
+        } else {
+            if (cart.containsKey(product)) {
+                cart.put(product, cart.get(product) + quantity);
+            } else {
+                cart.put(product, quantity);
+            }
+            product.getStock().put(size, availableStock - quantity); // Reduce stock
+        }
+    }
+    */
     public void removeProduct(Product product){
         int index = -1;
         for(CartProduct cartProduct : cartProducts){
