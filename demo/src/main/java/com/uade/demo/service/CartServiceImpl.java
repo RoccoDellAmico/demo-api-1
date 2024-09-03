@@ -25,7 +25,7 @@ public class CartServiceImpl implements CartService {
     private UserRepository userRepository;
 
     @Override
-    public void addProduct(Long cartId, Long productId, int quantity) throws ItemNotFoundException {
+    public Cart addProduct(Long cartId, Long productId, int quantity) throws ItemNotFoundException {
         Cart cart = cartRepository.findByCartId(cartId).orElseThrow(() -> new ItemNotFoundException());
         Product product = productRepository.findById(productId).orElseThrow(
             () -> new ItemNotFoundException());
@@ -37,11 +37,13 @@ public class CartServiceImpl implements CartService {
             cartProduct.setQuantity(quantity);
             cart.addProduct(cartProduct);
             cartRepository.save(cart);
+            return cart;
         }
+        return null;
     }
 
     @Override
-    public void removeProduct(Long cartId, Long productId) throws ItemNotFoundException{
+    public Cart removeProduct(Long cartId, Long productId) throws ItemNotFoundException{
         Cart cart = cartRepository.findByCartId(cartId).orElseThrow(() -> new ItemNotFoundException());
         Product product = productRepository.findById(productId).orElseThrow(
             () -> new ItemNotFoundException());
@@ -49,31 +51,37 @@ public class CartServiceImpl implements CartService {
         if(hasProduct){
             cart.removeProduct(product);
             cartRepository.save(cart);
+            return cart;
         }
+        return null;
     }
 
     @Override
-    public void updateProductQuantity(Long cartId, Long productId, int newQuantity) throws ItemNotFoundException {
+    public Cart updateProductQuantity(Long cartId, Long productId, int newQuantity) throws ItemNotFoundException {
         Cart cart = cartRepository.findByCartId(cartId).orElseThrow(() -> new ItemNotFoundException());
         boolean hasProduct = cart.hasProduct(productId);
         if(hasProduct){
             cart.updateProductQuantity(productId, newQuantity);
             cartRepository.save(cart);
+            return cart;
         }
+        return null;
     }
 
     @Override
-    public void addOneProduct(Long cartId, Long productId) throws ItemNotFoundException{
+    public Cart addOneProduct(Long cartId, Long productId) throws ItemNotFoundException{
         Cart cart = cartRepository.findByCartId(cartId).orElseThrow(() -> new ItemNotFoundException());
         boolean hasProduct = cart.hasProduct(productId);
         if(hasProduct){
             cart.updateProductQuantity(productId, cart.getCartProductQuantity(productId) + 1);
             cartRepository.save(cart);
+            return cart;
         }
+        return null;
     }
 
     @Override
-    public void substractOneProduct(Long cartId, Long productId) throws ItemNotFoundException{
+    public Cart substractOneProduct(Long cartId, Long productId) throws ItemNotFoundException{
         Cart cart = cartRepository.findByCartId(cartId).orElseThrow(() -> new ItemNotFoundException());
         boolean hasProduct = cart.hasProduct(productId);
         if(hasProduct){
@@ -81,13 +89,17 @@ public class CartServiceImpl implements CartService {
             cartRepository.save(cart);
             if(cart.getCartProductQuantity(productId) == 0)
                 removeProduct(cartId, productId);
+                return cart;
         }
+        return null;
     }
 
     @Override
-    public void clearCart(Long cartId) throws ItemNotFoundException {
+    public Cart clearCart(Long cartId) throws ItemNotFoundException {
         Cart cart = cartRepository.findByCartId(cartId).orElseThrow(() -> new ItemNotFoundException());
         cart.clearCart();
+        cartRepository.save(cart);
+        return cart;
     }
 
     @Override
