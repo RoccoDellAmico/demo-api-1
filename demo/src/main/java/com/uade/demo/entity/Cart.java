@@ -7,18 +7,34 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.Builder;
 import lombok.Data;
 
 @Entity
 @Data
-@Builder
 public class Cart {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long cartId;
     private List<CartProduct> cartProducts = new ArrayList<>();
+    private User user;
+
+    public Cart(User user){
+        this.user = user;
+    }
+
+    public Cart(){}
+
+    public Cart(Long cartId, List<CartProduct> cartProducts, User user){
+        this.cartId = cartId;
+        this.cartProducts = cartProducts;
+        this.user = user;
+    }
+
+    public Cart(Long cartId, User user){
+        this.cartId = cartId;
+        this.user = user;
+    }
 
     public void addProduct(CartProduct cartProduct){
         cartProducts.add(cartProduct);
