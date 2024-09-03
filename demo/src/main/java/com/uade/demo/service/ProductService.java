@@ -14,6 +14,12 @@ public interface ProductService {
 
     public Optional<Product> getProductByCategory(Long categoryId);
 
+    public Optional<Product> getProductsByPriceRange(double maxPrice);
+
+    public Optional<Product> getProductsByLeague(String league);
+
+    public Optional<Product> getProductsByClub(String club);
+
     public Product createProduct(String description, double price, String club, String league);
 
     public String deleteProduct(Long productId);

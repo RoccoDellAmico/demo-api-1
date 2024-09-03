@@ -39,6 +39,37 @@ public class ProductServiceImpl implements ProductService {
 
     }
 
+    public Optional<Product> getProductsByPriceRange(double maxPrice) {
+        Optional<Product> products = productRepository.findByPriceBetween(maxPrice);
+
+        if (products.isEmpty()) {
+            return Optional.empty();
+        }
+
+        return products;
+    }
+
+
+    public Optional<Product> getProductsByLeague(String league) {
+        Optional<Product> products = productRepository.findByLeague(league);
+
+        if (products.isEmpty()) {
+            return Optional.empty();
+        }
+
+        return products;
+    }
+
+    public Optional<Product> getProductsByClub(String club) {
+        Optional<Product> products = productRepository.findByClub(club);
+
+        if (products.isEmpty()) {
+            return Optional.empty();
+        }
+
+        return products;
+    }
+
     public Product createProduct(String description, double price, String club, String league){
         return productRepository.save(new Product(description, price, club, league));
     }

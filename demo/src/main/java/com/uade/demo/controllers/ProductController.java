@@ -1,6 +1,7 @@
 package com.uade.demo.controllers;
 
 import java.util.Optional;
+import java.lang.StackWalker.Option;
 import java.net.URI;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +55,31 @@ public class ProductController {
             return ResponseEntity.ok(result.get());
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("public/products/price/{maxPrice}")
+    public ResponseEntity<Product> getProductsByPriceRange(@PathVariable double maxPrice) {
+        Optional<Product> result = productService.getProductsByPriceRange(maxPrice);
+        if(result.isPresent())
+            return ResponseEntity.ok(result.get());
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("public/products/league/{league}")
+    public ResponseEntity<Product> getProductsByLeague(@PathVariable String league) {
+        Optional<Product> result = productService.getProductsByLeague(league);
+        if(result.isPresent())
+            return ResponseEntity.ok(result.get());
+        return ResponseEntity.noContent().build();
+    }
     
+    @GetMapping("public/products/club/{club}")
+    public ResponseEntity<Product> getProductsByClub(@PathVariable String club) {
+        Optional<Product> result = productService.getProductsByClub(club);
+        if(result.isPresent())
+            return ResponseEntity.ok(result.get());
+        return ResponseEntity.noContent().build();
+    }
+
     @PostMapping("/admin/products")
     public ResponseEntity<Object> createProduct(@RequestBody ProductRequest productRequest) {
         Product result = productService.createProduct(productRequest.getDescription(), productRequest.getPrice(), 

@@ -14,4 +14,10 @@ public interface ProductRepository extends JpaRepository<Product, Long>{
     Optional<Product> findById(Long id);
 
     Optional<Product> findByCategories(Optional<Category> categeory);
+
+    Optional<Product> findByPriceBetween(double maxPrice);
+
+    Optional<Product> findByLeague(String league);
+
+    Optional<Product> findByClub(String club);
 }
