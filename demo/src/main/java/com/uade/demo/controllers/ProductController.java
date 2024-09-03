@@ -31,7 +31,7 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    @GetMapping("public/products")
+    @GetMapping("/public/products")
     public ResponseEntity<Page<Product>> getProducts(@RequestParam(required = false) Integer page,
             @RequestParam(required = false) Integer size) {
         if (page == null || size == null)
@@ -39,7 +39,7 @@ public class ProductController {
         return ResponseEntity.ok(productService.getProducts(PageRequest.of(page, size)));
     }
     
-    @GetMapping("public/products/{productId}")
+    @GetMapping("/public/products/{productId}")
     public ResponseEntity<Product> getProductById(@PathVariable Long productId) {
         Optional<Product> result = productService.getProductById(productId);
         if(result.isPresent())
@@ -47,7 +47,7 @@ public class ProductController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("public/categories/{categoryId}/products")
+    @GetMapping("/public/categories/{categoryId}/products")
     public ResponseEntity<Product> getProduductByCategory(@PathVariable Long categoryId) {
         Optional<Product> result = productService.getProductByCategory(categoryId);
         if(result.isPresent())

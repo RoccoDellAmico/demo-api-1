@@ -28,12 +28,11 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(categoryId);
     }
 
-    @Override
-    public User createUser(String username, String password, String name, String surname, String mail)
-            throws UserDuplicateException {
+    public User createUser(String username, String password, String name, String surname, String mail, Role role)
+                throws UserDuplicateException {
         Optional<User> users = userRepository.findByEmail(mail);
         if (users.isEmpty())
-            return userRepository.save(new User(username, password, name, surname, mail, Role.USER));
+            return userRepository.save(new User(username, password, name, surname, mail, role));
         throw new UserDuplicateException();
     }
 
