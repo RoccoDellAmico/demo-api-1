@@ -9,6 +9,7 @@ import com.uade.demo.controllers.auth.AuthenticationRequest;
 import com.uade.demo.controllers.auth.AuthenticationResponse;
 import com.uade.demo.controllers.auth.RegisterRequest;
 import com.uade.demo.controllers.config.JwtService;
+import com.uade.demo.entity.Role;
 import com.uade.demo.entity.User;
 import com.uade.demo.repository.UserRepository;
 
@@ -37,7 +38,7 @@ public class AuthenticationService {
                                 request.getEmail(),
                                 request.getFirstname(),
                                 request.getLastname(),
-                                request.getRole());
+                                Role.USER);
 
                 repository.save(user);
                 var jwtToken = jwtService.generateToken(user);

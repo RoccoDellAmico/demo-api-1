@@ -7,17 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.uade.demo.entity.Category;
 import com.uade.demo.entity.Product;
-import com.uade.demo.repository.CategoryRepository;
 import com.uade.demo.repository.ProductRepository;
 
 @Service
 public class ProductServiceImpl implements ProductService {
-
-    @Autowired
-    private CategoryRepository CategoryRepository;
 
     @Autowired
     private ProductRepository productRepository;
@@ -59,10 +55,12 @@ public class ProductServiceImpl implements ProductService {
         return products;
     }
 
+    @Transactional(rollbackFor = Throwable.class)
     public Product createProduct(String description, double price, String club, String league){
         return productRepository.save(new Product(description, price, club, league));
     }
 
+    @Transactional(rollbackFor = Throwable.class)
     public String deleteProduct(Long productId) {
         Product product = productRepository.findById(productId).orElse(null);
 

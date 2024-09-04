@@ -1,10 +1,10 @@
 package com.uade.demo.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.uade.demo.entity.Product;
 import com.uade.demo.entity.User;
@@ -132,6 +132,7 @@ public class CartServiceImpl implements CartService {
         return carts;
     }
 
+    @Transactional(rollbackFor = Throwable.class)
     @Override
     public Cart createCart(String email) throws ItemNotFoundException{
         User user = userRepository.findByEmail(email).orElseThrow(() -> new ItemNotFoundException());

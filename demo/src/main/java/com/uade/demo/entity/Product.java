@@ -1,7 +1,6 @@
 package com.uade.demo.entity;
 
 import java.util.List;
-import java.util.Map;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

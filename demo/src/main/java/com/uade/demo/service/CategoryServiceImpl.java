@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.uade.demo.entity.Category;
-import com.uade.demo.entity.Product;
 import com.uade.demo.exceptions.CategoryDuplicateException;
 import com.uade.demo.repository.CategoryRepository;
 

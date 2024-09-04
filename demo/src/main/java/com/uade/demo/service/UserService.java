@@ -6,13 +6,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 import com.uade.demo.entity.User;
-import com.uade.demo.exceptions.UserDuplicateException;
 
 public interface UserService {
     public Page<User> getUsers(PageRequest pageRequest);
 
     public Optional<User> getUserById(Long categoryId);
-
-    public User createUser(String username, String password, String name, String surname, String mail)
-        throws UserDuplicateException;
 }
