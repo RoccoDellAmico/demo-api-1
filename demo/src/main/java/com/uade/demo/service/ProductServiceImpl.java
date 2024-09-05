@@ -56,8 +56,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Transactional(rollbackFor = Throwable.class)
-    public Product createProduct(String description, double price, String club, String league){
-        return productRepository.save(new Product(description, price, club, league));
+    public Product createProduct(String description, double price, String club, String league, List<String> photos) {
+        return productRepository.save(new Product(description, price, club, league,photos));
     }
 
     @Transactional(rollbackFor = Throwable.class)

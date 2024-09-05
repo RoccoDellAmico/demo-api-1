@@ -1,6 +1,7 @@
 package com.uade.demo.entity;
 
 import java.util.List;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -31,6 +32,9 @@ public class Product {
 
     private String league;
 
+    @ElementCollection
+    private List<String> photos;
+
     @ManyToMany
     @JoinTable(
         name = "product_category",
@@ -43,10 +47,11 @@ public class Product {
     //@JoinColumn(name = "category_id")
     //private List<Category> categories;
 
-    public Product(String description, double price, String club, String league){
+    public Product(String description, double price, String club, String league, List<String> photos) {
         this.description = description;
         this.price = price;
         this.club = club;
         this.league = league;
+        this.photos = photos;
     }
 }

@@ -21,7 +21,7 @@ public interface ProductService {
 
     public Optional<Product> getProductsByClub(String club);
 
-    public Product createProduct(String description, double price, String club, String league);
+    public Product createProduct(String description, double price, String club, String league, List<String> photos);
 
     public String deleteProduct(Long productId);
 }
