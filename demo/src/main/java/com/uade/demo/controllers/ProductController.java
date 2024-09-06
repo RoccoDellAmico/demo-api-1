@@ -79,6 +79,7 @@ public class ProductController {
     @PostMapping("/admin/products")
     public ResponseEntity<Object> createProduct(@RequestBody ProductRequest productRequest) {
         Product result = productService.createProduct(productRequest.getDescription(), productRequest.getPrice(), 
+            productRequest.getSize(), productRequest.getStock(), 
             productRequest.getClub(), productRequest.getLeague(), productRequest.getPhotos());
         return ResponseEntity.created(URI.create("/products/" + result.getId())).body(result);
     }

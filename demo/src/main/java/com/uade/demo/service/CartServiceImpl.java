@@ -124,6 +124,9 @@ public class CartServiceImpl implements CartService {
     @Override
     public List<Cart> getCarts(){
         return cartRepository.findAll();
+        //probar haciendo
+        //list<cart> carts = findall()
+        //list<cartProducts> cartProducts = findByCartId()
     }
 
     @Override

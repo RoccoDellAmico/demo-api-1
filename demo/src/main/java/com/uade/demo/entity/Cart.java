@@ -4,16 +4,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import lombok.Data;
 
 @Entity
 @Data
+@Table(name = "cart")
 public class Cart {
 
     @Id
@@ -23,14 +28,25 @@ public class Cart {
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CartProduct> cartProducts = new ArrayList<>();
 
-    @ManyToOne
+    @OneToOne
+    @JoinColumn(name = "user_id")
     private User user;
+
+    @Column(name = "active", columnDefinition = "TINYINT(1)")
+    private boolean active = true;
 
     public Cart(User user){
         this.user = user;
     }
 
     public Cart(){}
+
+    public Cart(Long cartId, List<CartProduct> cartProducts, User user, boolean active){
+        this.cartId = cartId;
+        this.cartProducts = cartProducts;
+        this.user = user;
+        this.active = active;
+    }
 
     public Cart(Long cartId, List<CartProduct> cartProducts, User user){
         this.cartId = cartId;
@@ -126,4 +142,7 @@ public class Cart {
         return 0;
     }
 
+    public void notActive(){
+        this.active = false;
+    }
 }

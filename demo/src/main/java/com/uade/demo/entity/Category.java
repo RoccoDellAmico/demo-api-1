@@ -21,14 +21,6 @@ public class Category {
     @Column
     private String description;
 
-    @ManyToMany
-    @JoinTable(
-        name = "product_category",
-        joinColumns = @JoinColumn(name = "category_id"),
-        inverseJoinColumns = @JoinColumn(name = "product_id")
-    )
-    private List<Product> products;
-
     public Category(){}
 
     public Category(String description){
