@@ -47,6 +47,15 @@ public class CategoryController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/public/categories/{categoryDescription}")
+    public ResponseEntity<Category> getCategoryByDescription(@RequestParam String description) {
+        Optional<Category> result = categoryService.getCategoryByDescription(description);
+        if (result.isPresent())
+            return ResponseEntity.ok(result.get());
+        return ResponseEntity.noContent().build();
+    }
+    
+
     @PostMapping("/admin/categories")
     public ResponseEntity<Object> createCategory(@RequestBody CategoryRequest categoryRequest)
             throws CategoryDuplicateException {

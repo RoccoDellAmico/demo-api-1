@@ -54,4 +54,12 @@ public class Product {
         this.league = league;
         this.photos = photos;
     }
+
+    public void addProductCategory(Category category) {
+        categories.add(category);
+    }
+
+    public void removeProductCategory(Category category) {
+        categories.remove(category);
+    }
 }

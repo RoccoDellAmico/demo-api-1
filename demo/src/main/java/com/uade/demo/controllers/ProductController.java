@@ -9,17 +9,21 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.uade.demo.service.CategoryService;
 import com.uade.demo.service.ProductService;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 import com.uade.demo.entity.Product;
+import com.uade.demo.entity.Category;
 import com.uade.demo.entity.dto.ProductRequest;
+import com.uade.demo.exceptions.ItemNotFoundException;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,6 +35,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class ProductController {
     @Autowired
     private ProductService productService;
+
 
     @GetMapping("/public/products")
     public ResponseEntity<Page<Product>> getProducts(@RequestParam(required = false) Integer page,
@@ -73,6 +78,38 @@ public class ProductController {
         Optional<Product> result = productService.getProductsByClub(club);
         if(result.isPresent())
             return ResponseEntity.ok(result.get());
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("admin/products/{productId}/category/{categoryDescription}/update/add")
+    public ResponseEntity<Product> addProductCategory(@PathVariable Long id, @RequestBody String description) {
+        Optional<Product> product = productService.addProductCategory(id, description);
+        if(product.isPresent())
+            return ResponseEntity.ok(product.get());
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("admin/products/{productId}/category/{categoryDescription}/update/delete")
+    public ResponseEntity<Product> deleteProductCategory(@PathVariable Long id, @RequestBody String description)   {
+        Optional<Product> product = productService.deleteProductCategory(id, description);
+        if(product.isPresent())
+            return ResponseEntity.ok(product.get());
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/admin/products/{productId}/price/{newPrice}/update")
+    public ResponseEntity<Product> updateProductPrice(@PathVariable Long id, @RequestParam double newPrice) {
+        Optional<Product> product = productService.updateProductPrice(id, newPrice);
+        if(product.isPresent())
+            return ResponseEntity.ok(product.get());
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/admin/products/{productId}/stock/{newStock}/update")
+    public ResponseEntity<Product> updateProductStock(@PathVariable Long id, @RequestParam int newStock) {
+        Optional<Product> product = productService.updateProductStock(id, newStock);
+        if(product.isPresent())
+            return ResponseEntity.ok(product.get());
         return ResponseEntity.noContent().build();
     }
 
