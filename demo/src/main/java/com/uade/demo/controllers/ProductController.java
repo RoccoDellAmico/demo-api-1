@@ -77,33 +77,33 @@ public class ProductController {
         return ResponseEntity.ok(result);
     }
 
-    @PutMapping("admin/products/{productId}/category/{categoryDescription}/update/add")
-    public ResponseEntity<Product> addProductCategory(@PathVariable Long id, @RequestBody String description) {
-        Optional<Product> product = productService.addProductCategory(id, description);
+    @PutMapping("admin/products/{productId}/category/update/add")
+    public ResponseEntity<Product> addProductCategory(@PathVariable Long productId, @RequestBody String categoryDescription) {
+        Optional<Product> product = productService.addProductCategory(productId, categoryDescription);
         if(product.isPresent())
             return ResponseEntity.ok(product.get());
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("admin/products/{productId}/category/{categoryDescription}/update/delete")
-    public ResponseEntity<Product> deleteProductCategory(@PathVariable Long id, @RequestBody String description)   {
-        Optional<Product> product = productService.deleteProductCategory(id, description);
+    @PutMapping("admin/products/{productId}/category/update/delete")
+    public ResponseEntity<Product> deleteProductCategory(@PathVariable Long productId, @RequestBody String categoryDescription)   {
+        Optional<Product> product = productService.deleteProductCategory(productId, categoryDescription);
         if(product.isPresent())
             return ResponseEntity.ok(product.get());
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/admin/products/{productId}/price/{newPrice}/update")
-    public ResponseEntity<Product> updateProductPrice(@PathVariable Long id, @RequestParam double newPrice) {
-        Optional<Product> product = productService.updateProductPrice(id, newPrice);
+    public ResponseEntity<Product> updateProductPrice(@PathVariable Long productId, @PathVariable double newPrice) {
+        Optional<Product> product = productService.updateProductPrice(productId, newPrice);
         if(product.isPresent())
             return ResponseEntity.ok(product.get());
         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/admin/products/{productId}/stock/{newStock}/update")
-    public ResponseEntity<Product> updateProductStock(@PathVariable Long id, @RequestParam int newStock) {
-        Optional<Product> product = productService.updateProductStock(id, newStock);
+    public ResponseEntity<Product> updateProductStock(@PathVariable Long productId, @PathVariable int newStock) {
+        Optional<Product> product = productService.updateProductStock(productId, newStock);
         if(product.isPresent())
             return ResponseEntity.ok(product.get());
         return ResponseEntity.noContent().build();
