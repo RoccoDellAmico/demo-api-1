@@ -21,7 +21,9 @@ public interface ProductRepository extends JpaRepository<Product, Long>{
     @Query(value = "select p from Product p where p.price > ?1 and p.price < ?2")
     List<Product> findByPriceBetween(double minPrice, double maxPrice);
 
-    Optional<Product> findByLeague(String league);
+    @Query(value = "select p from Product p where p.league = ?1")
+    List<Product> findByLeague(String league);
 
-    Optional<Product> findByClub(String club);
+    @Query(value = "select p from Product p where p.club = ?1")
+    List<Product> findByClub(String club);
 }

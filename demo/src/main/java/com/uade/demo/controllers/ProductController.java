@@ -66,19 +66,15 @@ public class ProductController {
     }
 
     @GetMapping("public/products/league/{league}")
-    public ResponseEntity<Product> getProductsByLeague(@PathVariable String league) {
-        Optional<Product> result = productService.getProductsByLeague(league);
-        if(result.isPresent())
-            return ResponseEntity.ok(result.get());
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<List<Product>> getProductsByLeague(@PathVariable String league) {
+        List<Product> result = productService.getProductsByLeague(league);
+        return ResponseEntity.ok(result);
     }
     
     @GetMapping("public/products/club/{club}")
-    public ResponseEntity<Product> getProductsByClub(@PathVariable String club) {
-        Optional<Product> result = productService.getProductsByClub(club);
-        if(result.isPresent())
-            return ResponseEntity.ok(result.get());
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<List<Product>> getProductsByClub(@PathVariable String club) {
+        List<Product> result = productService.getProductsByClub(club);
+        return ResponseEntity.ok(result);
     }
 
     @PutMapping("admin/products/{productId}/category/{categoryDescription}/update/add")

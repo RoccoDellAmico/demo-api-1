@@ -42,23 +42,13 @@ public class ProductServiceImpl implements ProductService {
         return products;
     }
 
-    public Optional<Product> getProductsByLeague(String league) {
-        Optional<Product> products = productRepository.findByLeague(league);
-
-        if (products.isEmpty()) {
-            return Optional.empty();
-        }
-
+    public List<Product> getProductsByLeague(String league) {
+        List<Product> products = productRepository.findByLeague(league);
         return products;
     }
 
-    public Optional<Product> getProductsByClub(String club) {
-        Optional<Product> products = productRepository.findByClub(club);
-
-        if (products.isEmpty()) {
-            return Optional.empty();
-        }
-
+    public List<Product> getProductsByClub(String club) {
+        List<Product> products = productRepository.findByClub(club);
         return products;
     }
 

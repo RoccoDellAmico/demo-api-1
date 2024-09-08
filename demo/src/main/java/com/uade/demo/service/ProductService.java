@@ -18,9 +18,9 @@ public interface ProductService {
 
     public List<Product> getProductsByPriceRange(double minPrice, double maxPrice);
 
-    public Optional<Product> getProductsByLeague(String league);
+    public List<Product> getProductsByLeague(String league);
 
-    public Optional<Product> getProductsByClub(String club);
+    public List<Product> getProductsByClub(String club);
 
     public Optional<Product> addProductCategory(Long id, String description);
 
