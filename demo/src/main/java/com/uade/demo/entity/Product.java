@@ -47,6 +47,8 @@ public class Product {
     //@JoinColumn(name = "category_id")
     //private List<Category> categories;
 
+    public Product() {}
+
     public Product(String description, double price, String club, String league, List<String> photos) {
         this.description = description;
         this.price = price;

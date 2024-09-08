@@ -62,57 +62,59 @@ public class ProductServiceImpl implements ProductService {
     }
 
     public Optional<Product> addProductCategory(Long id, String description) {
-        Optional<Product> product = productRepository.findById(id);
-        if (product.isEmpty()) {
-            return Optional.empty();
+        Optional<Product> productOptional = productRepository.findById(id);
+        if (productOptional.isPresent()){
+            Product product = productOptional.get();
+            Category category = categoyRepository.findByDescription(description).orElseGet(() -> {
+                Category newCategory = new Category(description);
+                return categoyRepository.save(newCategory);
+            });
+            product.addProductCategory(category);
+            productRepository.save(product);
+            return Optional.of(product);
         }
-
-        Category category = categoyRepository.findByDescription(description).orElseGet(() -> {
-            Category newCategory = new Category(description);
-            return categoyRepository.save(newCategory);
-        });
-
-        product.get().addProductCategory(category);
-        productRepository.save(product.get());
-        return product;
+        return Optional.empty();
     }
 
     @Override
     public Optional<Product> deleteProductCategory(Long id, String description) {
-        Optional<Product> product = productRepository.findById(id);
-        if(product.isEmpty()){
-            return Optional.empty();
+        Optional<Product> productOptional = productRepository.findById(id);
+        if (productOptional.isPresent()) {
+            Product product = productOptional.get();
+            Optional<Category> categoryOptional = categoyRepository.findByDescription(description);
+            if (categoryOptional.isPresent()) {
+                Category category = categoryOptional.get();
+                product.removeProductCategory(category);
+                productRepository.save(product);
+                return Optional.of(product);
+            }
+            return Optional.of(product);
         }
-        Optional<Category> category = categoyRepository.findByDescription(description);
-        if(category.isEmpty()){
-            return product;
-        }
-        product.get().removeProductCategory(category.get());
-        productRepository.save(product.get());
-        return product;
+        return Optional.empty();
     }
 
     @Override
     public Optional<Product> updateProductPrice(Long id, double price) {
-        Optional<Product> product = productRepository.findById(id);
-        if(product.isEmpty()){
-            return Optional.empty();
+        Optional<Product> productOptional = productRepository.findById(id);
+        if (productOptional.isPresent()){
+            Product product = productOptional.get();
+            product.setPrice(price);
+            productRepository.save(product);
+            return Optional.of(product);
         }
-        product.get().setPrice(price);
-        productRepository.save(product.get());
-        return product;
+        return Optional.empty();
     }
 
     @Override
     public Optional<Product> updateProductStock(Long id, int stock) {
-        Optional<Product> product = productRepository.findById(id);
-        if (product.isEmpty()) {
-            return Optional.empty();
+        Optional<Product> productOptional = productRepository.findById(id);
+        if (productOptional.isPresent()){
+            Product product = productOptional.get();
+            product.setStock(stock);
+            productRepository.save(product);
+            return Optional.of(product);
         }
-
-        product.get().setStock(stock);
-        productRepository.save(product.get());
-        return product;
+        return Optional.empty();
     }
 
     @Transactional(rollbackFor = Throwable.class)
