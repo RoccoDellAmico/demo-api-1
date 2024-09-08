@@ -20,4 +20,8 @@ public class Payment {
     private String paymentMethod;
     private double total;
     private String details;
+
+
+    public Payment(){}
 }
+

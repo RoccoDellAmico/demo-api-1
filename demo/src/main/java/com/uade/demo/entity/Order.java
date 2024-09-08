@@ -27,4 +27,6 @@ public class Order {
     private List<OrderProduct> products; // producto : talle
     @Column
     private double total;
+
+    public Order(){}
 }
