@@ -16,7 +16,12 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
-    private final PasswordEncoder passwordEncoder = null;
+    private final PasswordEncoder passwordEncoder;
+    
+    @Autowired
+    public UserServiceImpl(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 
     public Page<User> getUsers(PageRequest pageRequest) {
         return userRepository.findAll(pageRequest);
