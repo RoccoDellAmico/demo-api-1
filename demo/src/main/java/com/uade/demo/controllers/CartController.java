@@ -20,8 +20,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 @RestController
 @RequestMapping("/api")
 public class CartController {
-    //implementar crear carrito, metodos controller
-    //implementar cartDTO
     @Autowired
     private CartService cartService;
 

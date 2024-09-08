@@ -54,4 +54,6 @@ public class Product {
         this.league = league;
         this.photos = photos;
     }
+
+    public Product(){}
 }
