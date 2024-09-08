@@ -13,6 +13,7 @@ import com.uade.demo.entity.Category;
 import com.uade.demo.entity.Product;
 import com.uade.demo.exceptions.ItemNotFoundException;
 import com.uade.demo.repository.CategoryRepository;
+import com.uade.demo.entity.Size;
 import com.uade.demo.repository.ProductRepository;
 
 @Service
@@ -118,8 +119,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Transactional(rollbackFor = Throwable.class)
-    public Product createProduct(String description, double price, String club, String league, List<String> photos) {
-        return productRepository.save(new Product(description, price, club, league,photos));
+    public Product createProduct(String description, double price, Size size, int stock,
+    String club, String league, List<String> photos) {
+        return productRepository.save(new Product(description, price, size, stock, club, league,photos));
     }
 
     @Transactional(rollbackFor = Throwable.class)

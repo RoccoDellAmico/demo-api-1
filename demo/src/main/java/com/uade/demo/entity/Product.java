@@ -3,6 +3,8 @@ package com.uade.demo.entity;
 import java.util.List;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -22,9 +24,8 @@ public class Product {
 
     private double price;
 
-    //private Map<String, Integer> stock; // talle : stock del talle
-
-    private String size;
+    @Enumerated(EnumType.STRING)
+    private Size size;
 
     private int stock;
 
@@ -43,15 +44,12 @@ public class Product {
     )   
     private List<Category> categories;
 
-    //@ManyToMany
-    //@JoinColumn(name = "category_id")
-    //private List<Category> categories;
-
-    public Product() {}
-
-    public Product(String description, double price, String club, String league, List<String> photos) {
+    public Product(String description, double price, Size size, int stock,
+        String club, String league, List<String> photos) {
         this.description = description;
         this.price = price;
+        this.size = size;
+        this.stock = stock;
         this.club = club;
         this.league = league;
         this.photos = photos;
@@ -64,4 +62,6 @@ public class Product {
     public void removeProductCategory(Category category) {
         categories.remove(category);
     }
+
+    public Product(){}
 }

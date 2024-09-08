@@ -26,4 +26,7 @@ public class OrderProduct {
 
     @Column(nullable = false)
     private Integer quantity;
+
+    public OrderProduct(){}
 }
+
