@@ -1,5 +1,6 @@
 package com.uade.demo.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.uade.demo.entity.Product;
 import com.uade.demo.entity.User;
+import com.uade.demo.entity.dto.CartDTO;
+import com.uade.demo.entity.dto.CartProductDTO;
 import com.uade.demo.exceptions.ItemNotFoundException;
 import com.uade.demo.repository.CartRepository;
 import com.uade.demo.repository.ProductRepository;
@@ -25,8 +28,30 @@ public class CartServiceImpl implements CartService {
     @Autowired
     private UserRepository userRepository;
 
+    public CartDTO mapToCartDTO(Cart cart){
+        CartDTO cartDTO = new CartDTO();
+        cartDTO.setCartId(cart.getCartId());   
+        cartDTO.setCartProducts(mapToCartProductDTO(cart.getCartProducts()));
+        cartDTO.setUserEmail(cart.getUser().getEmail());
+        cartDTO.setActive(cart.isActive()); 
+        return cartDTO;
+    }
+
+    public List<CartProductDTO> mapToCartProductDTO(List<CartProduct> cartProducts){
+        List<CartProductDTO> cartProductsDTO = new ArrayList<>();
+        for(CartProduct cartProduct : cartProducts){
+            CartProductDTO cartProductDTO = new CartProductDTO();
+            cartProductDTO.setId(cartProduct.getCartProductId());
+            cartProductDTO.setCartId(cartProduct.getCart().getCartId());
+            cartProductDTO.setProduct(cartProduct.getProduct());
+            cartProductDTO.setQuantity(cartProduct.getQuantity());
+            cartProductsDTO.add(cartProductDTO);
+        }
+        return cartProductsDTO;
+    }
+
     @Override
-    public Cart addProduct(Long cartId, Long productId, int quantity) throws ItemNotFoundException {
+    public CartDTO addProduct(Long cartId, Long productId, int quantity) throws ItemNotFoundException {
         Cart cart = cartRepository.findByCartId(cartId).orElseThrow(() -> new ItemNotFoundException());
         Product product = productRepository.findById(productId).orElseThrow(
             () -> new ItemNotFoundException());
@@ -38,13 +63,13 @@ public class CartServiceImpl implements CartService {
             cartProduct.setQuantity(quantity);
             cart.addProduct(cartProduct);
             cartRepository.save(cart);
-            return cart;
+            return mapToCartDTO(cart);
         }
         return null;
     }
 
     @Override
-    public Cart removeProduct(Long cartId, Long productId) throws ItemNotFoundException{
+    public CartDTO removeProduct(Long cartId, Long productId) throws ItemNotFoundException{
         Cart cart = cartRepository.findByCartId(cartId).orElseThrow(() -> new ItemNotFoundException());
         Product product = productRepository.findById(productId).orElseThrow(
             () -> new ItemNotFoundException());
@@ -52,37 +77,37 @@ public class CartServiceImpl implements CartService {
         if(hasProduct){
             cart.removeProduct(product);
             cartRepository.save(cart);
-            return cart;
+            return mapToCartDTO(cart);
         }
         return null;
     }
 
     @Override
-    public Cart updateProductQuantity(Long cartId, Long productId, int newQuantity) throws ItemNotFoundException {
+    public CartDTO updateProductQuantity(Long cartId, Long productId, int newQuantity) throws ItemNotFoundException {
         Cart cart = cartRepository.findByCartId(cartId).orElseThrow(() -> new ItemNotFoundException());
         boolean hasProduct = cart.hasProduct(productId);
         if(hasProduct){
             cart.updateProductQuantity(productId, newQuantity);
             cartRepository.save(cart);
-            return cart;
+            return mapToCartDTO(cart);
         }
         return null;
     }
 
     @Override
-    public Cart addOneProduct(Long cartId, Long productId) throws ItemNotFoundException{
+    public CartDTO addOneProduct(Long cartId, Long productId) throws ItemNotFoundException{
         Cart cart = cartRepository.findByCartId(cartId).orElseThrow(() -> new ItemNotFoundException());
         boolean hasProduct = cart.hasProduct(productId);
         if(hasProduct){
             cart.updateProductQuantity(productId, cart.getCartProductQuantity(productId) + 1);
             cartRepository.save(cart);
-            return cart;
+            return mapToCartDTO(cart);
         }
         return null;
     }
 
     @Override
-    public Cart substractOneProduct(Long cartId, Long productId) throws ItemNotFoundException{
+    public CartDTO substractOneProduct(Long cartId, Long productId) throws ItemNotFoundException{
         Cart cart = cartRepository.findByCartId(cartId).orElseThrow(() -> new ItemNotFoundException());
         boolean hasProduct = cart.hasProduct(productId);
         if(hasProduct){
@@ -90,23 +115,23 @@ public class CartServiceImpl implements CartService {
             cartRepository.save(cart);
             if(cart.getCartProductQuantity(productId) == 0)
                 removeProduct(cartId, productId);
-                return cart;
+                return mapToCartDTO(cart);
         }
         return null;
     }
 
     @Override
-    public Cart clearCart(Long cartId) throws ItemNotFoundException {
+    public CartDTO clearCart(Long cartId) throws ItemNotFoundException {
         Cart cart = cartRepository.findByCartId(cartId).orElseThrow(() -> new ItemNotFoundException());
         cart.clearCart();
         cartRepository.save(cart);
-        return cart;
+        return mapToCartDTO(cart);
     }
 
     @Override
-    public List<CartProduct> getCartProducts(Long cartId) throws ItemNotFoundException {
+    public List<CartProductDTO> getCartProducts(Long cartId) throws ItemNotFoundException {
         Cart cart = cartRepository.findByCartId(cartId).orElseThrow(() -> new ItemNotFoundException());
-        return cart.getCartProducts();
+        return mapToCartProductDTO(cart.getCartProducts());
     }
 
     @Override
@@ -122,24 +147,33 @@ public class CartServiceImpl implements CartService {
     }  
 
     @Override
-    public List<Cart> getCarts(){
-        return cartRepository.findAll();
-        //probar haciendo
-        //list<cart> carts = findall()
-        //list<cartProducts> cartProducts = findByCartId()
+    public List<CartDTO> getCarts(){
+        List<Cart> carts = cartRepository.findAll();
+        List<CartDTO> cartDTOs = new ArrayList<>();
+        for(Cart cart : carts){
+            CartDTO cartDTO = mapToCartDTO(cart);
+            cartDTOs.add(cartDTO);
+        }
+        return cartDTOs;
     }
 
     @Override
-    public List<Cart> getCartsByUser(Long userId){
+    public List<CartDTO> getCartsByUser(Long userId){
         List<Cart> carts = cartRepository.findCartByUser(userId);
-        return carts;
+        List<CartDTO> cartDTOs = new ArrayList<>();
+        for(Cart cart : carts){
+            CartDTO cartDTO = mapToCartDTO(cart);
+            cartDTOs.add(cartDTO);
+        }
+        return cartDTOs;
     }
 
     @Transactional(rollbackFor = Throwable.class)
     @Override
-    public Cart createCart(String email) throws ItemNotFoundException{
+    public CartDTO createCart(String email) throws ItemNotFoundException{
         User user = userRepository.findByEmail(email).orElseThrow(() -> new ItemNotFoundException());
-        return cartRepository.save(new Cart(user));
+        Cart cart = cartRepository.save(new Cart(user));
+        return mapToCartDTO(cart);
     }
 }
 

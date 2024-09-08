@@ -107,7 +107,11 @@ public class Cart {
     }
 
     public int getItemCount(){
-        return cartProducts.size();
+        int itemCount = 0;
+        for(CartProduct cartProduct : cartProducts){
+            itemCount += cartProduct.getQuantity();
+        }
+        return itemCount;
     }
 
     public boolean hasProduct(Long productId){
@@ -143,5 +147,9 @@ public class Cart {
 
     public void notActive(){
         this.active = false;
+    }
+
+    public boolean isActive(){
+        return this.active;
     }
 }

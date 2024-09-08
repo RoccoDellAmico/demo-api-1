@@ -4,10 +4,10 @@ import java.util.List;
 
 import lombok.Data;
 
-import com.uade.demo.entity.CartProduct;
-
 @Data
 public class CartDTO {
     private Long cartId;
-    private List<CartProduct> cartProducts;
+    private List<CartProductDTO> cartProducts;
+    private String userEmail;
+    private boolean active;
 }
