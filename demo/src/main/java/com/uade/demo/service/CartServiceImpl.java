@@ -175,5 +175,11 @@ public class CartServiceImpl implements CartService {
         Cart cart = cartRepository.save(new Cart(user));
         return mapToCartDTO(cart);
     }
+
+    @Override
+    public CartDTO getCartById(Long cartId) throws ItemNotFoundException{
+        Cart cart = cartRepository.findByCartId(cartId).orElseThrow(() -> new ItemNotFoundException());
+        return mapToCartDTO(cart);
+    }
 }
 

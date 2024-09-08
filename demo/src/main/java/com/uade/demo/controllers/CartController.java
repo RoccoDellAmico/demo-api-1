@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("/api")
@@ -36,6 +38,13 @@ public class CartController {
         List<CartDTO> carts = cartService.getCartsByUser(userId);
         return ResponseEntity.ok(carts);
     }
+
+    @GetMapping("/public/carts/{cartId}")
+    public ResponseEntity<CartDTO> getCartById(@PathVariable Long cartId) throws ItemNotFoundException{
+        CartDTO cart = cartService.getCartById(cartId);
+        return ResponseEntity.ok(cart);
+    }
+    
 
     @PostMapping("/public/carts/{email}")
     public ResponseEntity<Object> createCart(@PathVariable String email) throws ItemNotFoundException {

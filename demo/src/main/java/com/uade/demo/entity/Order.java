@@ -25,8 +25,17 @@ public class Order {
     private User user;
     @OneToMany(mappedBy = "order")
     private List<OrderProduct> products; // producto : talle
-    @Column
+
     private double total;
 
+    //private LocalDate date;
+
+    //private OrderStatus status;
+
     public Order(){}
+
+    public Order(User user, double total){
+        this.user = user;
+        this.total = total;
+    }
 }

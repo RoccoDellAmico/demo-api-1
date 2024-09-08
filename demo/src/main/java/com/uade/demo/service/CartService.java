@@ -21,4 +21,5 @@ public interface CartService {
     List<CartDTO> getCarts();
     List<CartDTO> getCartsByUser(Long userId);
     CartDTO createCart(String email) throws ItemNotFoundException; 
+    CartDTO getCartById(Long cartId) throws ItemNotFoundException;
 }
