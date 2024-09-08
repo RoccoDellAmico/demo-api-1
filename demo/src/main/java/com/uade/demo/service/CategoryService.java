@@ -14,5 +14,7 @@ public interface CategoryService {
 
     public Optional<Category> getCategoryById(Long categoryId);
 
+    public Optional<Category> getCategoryByDescription(String description);
+
     public Category createCategory(String description) throws CategoryDuplicateException;
 }

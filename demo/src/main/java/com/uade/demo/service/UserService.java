@@ -11,4 +11,6 @@ public interface UserService {
     public Page<User> getUsers(PageRequest pageRequest);
 
     public Optional<User> getUserById(Long categoryId);
+
+    public Optional<User> updatePassword(Long userId, String newPassword);
 }

@@ -28,9 +28,14 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryRepository.findById(categoryId);
     }
 
+    @Override
+    public Optional<Category> getCategoryByDescription(String description) {
+        return categoryRepository.findByDescription(description);
+    }
+
     @Transactional(rollbackFor = Throwable.class)
     public Category createCategory(String description) throws CategoryDuplicateException {
-        List<Category> categories = categoryRepository.findByDescription(description);
+        Optional<Category> categories = categoryRepository.findByDescription(description);
         if (categories.isEmpty())
             return categoryRepository.save(new Category(description));
         throw new CategoryDuplicateException();

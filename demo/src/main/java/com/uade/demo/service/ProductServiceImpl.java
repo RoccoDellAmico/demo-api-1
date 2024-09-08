@@ -9,7 +9,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.uade.demo.entity.Category;
 import com.uade.demo.entity.Product;
+import com.uade.demo.exceptions.ItemNotFoundException;
+import com.uade.demo.repository.CategoryRepository;
 import com.uade.demo.entity.Size;
 import com.uade.demo.repository.ProductRepository;
 
@@ -18,6 +21,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private CategoryRepository categoyRepository;
 
     public Page<Product> getProducts(PageRequest pageRequest){
         return productRepository.findAll(pageRequest);
@@ -54,6 +60,60 @@ public class ProductServiceImpl implements ProductService {
         }
 
         return products;
+    }
+
+    public Optional<Product> addProductCategory(Long id, String description) {
+        Optional<Product> product = productRepository.findById(id);
+        if (product.isEmpty()) {
+            return Optional.empty();
+        }
+
+        Category category = categoyRepository.findByDescription(description).orElseGet(() -> {
+            Category newCategory = new Category(description);
+            return categoyRepository.save(newCategory);
+        });
+
+        product.get().addProductCategory(category);
+        productRepository.save(product.get());
+        return product;
+    }
+
+    @Override
+    public Optional<Product> deleteProductCategory(Long id, String description) {
+        Optional<Product> product = productRepository.findById(id);
+        if(product.isEmpty()){
+            return Optional.empty();
+        }
+        Optional<Category> category = categoyRepository.findByDescription(description);
+        if(category.isEmpty()){
+            return product;
+        }
+        product.get().removeProductCategory(category.get());
+        productRepository.save(product.get());
+        return product;
+    }
+
+    @Override
+    public Optional<Product> updateProductPrice(Long id, double price) {
+        Optional<Product> product = productRepository.findById(id);
+        if(product.isEmpty()){
+            return Optional.empty();
+        }
+        product.get().setPrice(price);
+        productRepository.save(product.get());
+        return product;
+    }
+
+    @Override
+    public Optional<Product> updateProductStock(Long id, int stock) {
+        Optional<Product> product = productRepository.findById(id);
+        if (product.isEmpty()) {
+            return Optional.empty();
+        }
+
+        product.get().setStock(stock);
+        productRepository.save(product.get());
+        return product;
     }
 
     @Transactional(rollbackFor = Throwable.class)
