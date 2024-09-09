@@ -11,11 +11,11 @@ import com.uade.demo.entity.Product;
 import com.uade.demo.entity.User;
 import com.uade.demo.entity.dto.CartDTO;
 import com.uade.demo.entity.dto.CartProductDTO;
-import com.uade.demo.exceptions.APIException;
 import com.uade.demo.exceptions.ItemNotFoundException;
 import com.uade.demo.repository.CartRepository;
 import com.uade.demo.repository.ProductRepository;
 import com.uade.demo.repository.UserRepository;
+import com.uade.demo.controllers.YourCustomException;
 import com.uade.demo.entity.Cart;
 import com.uade.demo.entity.CartProduct;
 
@@ -63,14 +63,14 @@ public class CartServiceImpl implements CartService {
             cartProduct.setCart(cart);
             cartProduct.setProduct(product);
             if(quantity > product.getStock()){
-                throw new APIException(product.getDescription() + " sin stock disponible");
+                throw new YourCustomException(product.getDescription() + " sin stock disponible");
             }
             cartProduct.setQuantity(quantity);
             cart.addProduct(cartProduct);
             cartRepository.save(cart);
             return mapToCartDTO(cart);
         }
-        return null;
+        return mapToCartDTO(cart);
     }
 
     @Override
@@ -84,7 +84,7 @@ public class CartServiceImpl implements CartService {
             cartRepository.save(cart);
             return mapToCartDTO(cart);
         }
-        return null;
+        return mapToCartDTO(cart);
     }
 
     @Override
@@ -95,13 +95,13 @@ public class CartServiceImpl implements CartService {
             Product product = productRepository.findById(productId).orElseThrow(
                 () -> new ItemNotFoundException());
             if(newQuantity > product.getStock()){
-                throw new APIException(product.getDescription() + " sin stock disponible");
+                throw new YourCustomException(product.getDescription() + " sin stock disponible");
             }
             cart.updateProductQuantity(productId, newQuantity);
             cartRepository.save(cart);
             return mapToCartDTO(cart);
         }
-        return null;
+        return mapToCartDTO(cart);
     }
 
     @Override
@@ -112,13 +112,13 @@ public class CartServiceImpl implements CartService {
             Product product = productRepository.findById(productId).orElseThrow(
                 () -> new ItemNotFoundException());
             if(cart.getCartProductQuantity(productId) + 1 > product.getStock()){
-                throw new APIException(product.getDescription() + " sin stock disponible");
+                throw new YourCustomException(product.getDescription() + " sin stock disponible");
             }
             cart.updateProductQuantity(productId, cart.getCartProductQuantity(productId) + 1);
             cartRepository.save(cart);
             return mapToCartDTO(cart);
         }
-        return null;
+        return mapToCartDTO(cart);
     }
 
     @Override
@@ -132,7 +132,7 @@ public class CartServiceImpl implements CartService {
                 removeProduct(cartId, productId);
                 return mapToCartDTO(cart);
         }
-        return null;
+        return mapToCartDTO(cart);
     }
 
     @Override

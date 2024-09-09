@@ -7,13 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.uade.demo.controllers.YourCustomException;
 import com.uade.demo.entity.Cart;
 import com.uade.demo.entity.CartProduct;
 import com.uade.demo.entity.Order;
 import com.uade.demo.entity.OrderProduct;
 import com.uade.demo.entity.dto.OrderDTO;
 import com.uade.demo.entity.dto.OrderProductDTO;
-import com.uade.demo.exceptions.APIException;
 import com.uade.demo.exceptions.ItemNotFoundException;
 import com.uade.demo.repository.CartRepository;
 import com.uade.demo.repository.OrderRepository;
@@ -68,7 +68,7 @@ public class OrderServiceImpl implements OrderService{
         List<OrderProduct> orderProducts = mapToOrderProduct(cart.getCartProducts(), order);
         for(OrderProduct orderProduct : orderProducts){
             if(orderProduct.getQuantity() > orderProduct.getProduct().getStock()){
-                throw new APIException(orderProduct.getProduct().getDescription() + " sin stock disponible");
+                throw new YourCustomException(orderProduct.getProduct().getDescription() + " sin stock disponible");
             }
             order.addOrderProduct(orderProduct);
             orderProduct.getProduct().setStock(orderProduct.getProduct().getStock() - orderProduct.getQuantity());
