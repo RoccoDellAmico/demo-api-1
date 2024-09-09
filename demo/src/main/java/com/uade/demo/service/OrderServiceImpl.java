@@ -69,7 +69,7 @@ public class OrderServiceImpl implements OrderService{
             order.addOrderProduct(orderProduct);
         }
         Order savedOrder = orderRepository.save(order);
-        cart.notActive();
+        cart.changeState();
         cartRepository.save(cart);
         return mapToOrderDTO(savedOrder);
     }

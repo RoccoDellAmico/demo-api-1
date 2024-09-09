@@ -158,21 +158,22 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public List<CartDTO> getCartsByUser(Long userId){
-        List<Cart> carts = cartRepository.findCartByUser(userId);
-        List<CartDTO> cartDTOs = new ArrayList<>();
-        for(Cart cart : carts){
-            CartDTO cartDTO = mapToCartDTO(cart);
-            cartDTOs.add(cartDTO);
-        }
-        return cartDTOs;
+    public CartDTO getCartsByUser(Long userId){
+        Cart cart = cartRepository.findCartByUser(userId);
+        return mapToCartDTO(cart);
     }
 
     @Transactional(rollbackFor = Throwable.class)
     @Override
     public CartDTO createCart(String email) throws ItemNotFoundException{
         User user = userRepository.findByEmail(email).orElseThrow(() -> new ItemNotFoundException());
-        Cart cart = cartRepository.save(new Cart(user));
+        Cart cart = cartRepository.findCartByUser(user.getId());
+        if(cart == null){
+            Cart newCart = cartRepository.save(new Cart(user));
+            return mapToCartDTO(newCart);
+        }
+        cart.clearCart();
+        cart.changeState();
         return mapToCartDTO(cart);
     }
 
