@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.uade.demo.entity.Cart;
 import com.uade.demo.entity.CartProduct;
@@ -12,12 +13,12 @@ import com.uade.demo.entity.Order;
 import com.uade.demo.entity.OrderProduct;
 import com.uade.demo.entity.dto.OrderDTO;
 import com.uade.demo.entity.dto.OrderProductDTO;
+import com.uade.demo.exceptions.APIException;
 import com.uade.demo.exceptions.ItemNotFoundException;
 import com.uade.demo.repository.CartRepository;
 import com.uade.demo.repository.OrderRepository;
 
-import jakarta.transaction.Transactional;
-
+@Transactional
 @Service
 public class OrderServiceImpl implements OrderService{
 
@@ -59,14 +60,18 @@ public class OrderServiceImpl implements OrderService{
         return orderDTOs;
     }
 
-    @Transactional(rollbackOn = Throwable.class)
+    @Transactional(rollbackFor = Throwable.class)
     @Override
     public OrderDTO placeOrder(Long cartId) throws ItemNotFoundException {
         Cart cart = cartRepository.findByCartId(cartId).orElseThrow(()-> new ItemNotFoundException());
         Order order = createOrder(cart);
         List<OrderProduct> orderProducts = mapToOrderProduct(cart.getCartProducts(), order);
         for(OrderProduct orderProduct : orderProducts){
+            if(orderProduct.getQuantity() > orderProduct.getProduct().getStock()){
+                throw new APIException(orderProduct.getProduct().getDescription() + " sin stock disponible");
+            }
             order.addOrderProduct(orderProduct);
+            orderProduct.getProduct().setStock(orderProduct.getProduct().getStock() - orderProduct.getQuantity());
         }
         Order savedOrder = orderRepository.save(order);
         cart.changeState();
