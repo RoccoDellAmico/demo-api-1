@@ -1,8 +1,9 @@
 package com.uade.demo.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.persistence.Column;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,8 +24,8 @@ public class Order {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
-    @OneToMany(mappedBy = "order")
-    private List<OrderProduct> products; // producto : talle
+    @OneToMany(mappedBy = "order", cascade = CascadeType.PERSIST)
+    private List<OrderProduct> products = new ArrayList<>(); // producto : talle
 
     private double total;
 
@@ -37,5 +38,9 @@ public class Order {
     public Order(User user, double total){
         this.user = user;
         this.total = total;
+    }
+
+    public void addOrderProduct(OrderProduct orderProduct){
+        this.products.add(orderProduct);
     }
 }

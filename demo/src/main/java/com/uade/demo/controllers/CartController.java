@@ -8,8 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.uade.demo.entity.Cart;
-import com.uade.demo.entity.CartProduct;
 import com.uade.demo.entity.dto.CartDTO;
 import com.uade.demo.entity.dto.CartProductDTO;
 import com.uade.demo.exceptions.ItemNotFoundException;
@@ -18,7 +16,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 @RestController
@@ -34,9 +31,9 @@ public class CartController {
     }
 
     @GetMapping("/admin/carts/{userId}")
-    public ResponseEntity<List<CartDTO>> getCartsByUser(@PathVariable Long userId){
-        List<CartDTO> carts = cartService.getCartsByUser(userId);
-        return ResponseEntity.ok(carts);
+    public ResponseEntity<CartDTO> getCartsByUser(@PathVariable Long userId){
+        CartDTO cart = cartService.getCartsByUser(userId);
+        return ResponseEntity.ok(cart);
     }
 
     @GetMapping("/public/carts/{cartId}")

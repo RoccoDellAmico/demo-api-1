@@ -8,5 +8,6 @@ import lombok.Data;
 public class OrderDTO {
     private Long orderId;
     private List<OrderProductDTO> orderProducts;
+    private String userEmail;
     private double total;
 }

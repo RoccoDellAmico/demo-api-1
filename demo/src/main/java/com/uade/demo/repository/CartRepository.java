@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 
 import com.uade.demo.entity.Cart;
 
-import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -15,5 +14,5 @@ public interface CartRepository extends JpaRepository<Cart, Long>{
     Optional<Cart> findByCartId(Long cartId);
 
     @Query(value = "select c from Cart c where c.user.id = ?1")
-    List<Cart> findCartByUser(Long userId);
+    Cart findCartByUser(Long userId);
 }

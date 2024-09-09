@@ -145,8 +145,8 @@ public class Cart {
         return 0;
     }
 
-    public void notActive(){
-        this.active = false;
+    public void changeState(){
+        this.active = !active;
     }
 
     public boolean isActive(){
