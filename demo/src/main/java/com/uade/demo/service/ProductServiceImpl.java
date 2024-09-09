@@ -11,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.uade.demo.entity.Category;
 import com.uade.demo.entity.Product;
+import com.uade.demo.exceptions.CategoryDuplicateException;
+import com.uade.demo.exceptions.ItemNotFoundException;
 import com.uade.demo.repository.CategoryRepository;
 import com.uade.demo.entity.Size;
 import com.uade.demo.repository.ProductRepository;
@@ -22,7 +24,7 @@ public class ProductServiceImpl implements ProductService {
     private ProductRepository productRepository;
 
     @Autowired
-    private CategoryRepository categoyRepository;
+    private CategoryRepository categoryRepository;
 
     public Page<Product> getProducts(PageRequest pageRequest){
         return productRepository.findAll(pageRequest);
@@ -51,14 +53,25 @@ public class ProductServiceImpl implements ProductService {
         return products;
     }
 
-    public Optional<Product> addProductCategory(Long id, String description) {
+    public Optional<Product> addProductCategory(Long id, String description) 
+        throws CategoryDuplicateException {
         Optional<Product> productOptional = productRepository.findById(id);
         if (productOptional.isPresent()){
             Product product = productOptional.get();
-            Category category = categoyRepository.findByDescription(description).orElseGet(() -> {
-                Category newCategory = new Category(description);
-                return categoyRepository.save(newCategory);
-            });
+
+            Optional<Category> categoryOptional = categoryRepository.findByDescription(description);
+            
+            if (categoryOptional.isEmpty()) {
+                categoryOptional = Optional.of(new Category(description));
+                categoryRepository.save(categoryOptional.get());
+            }
+
+            Category category = categoryOptional.get();
+
+            List<Category> categories = product.getCategories();
+            if (categories.contains(category)) {
+                throw new CategoryDuplicateException(); }
+            
             product.addProductCategory(category);
             productRepository.save(product);
             return Optional.of(product);
@@ -71,7 +84,7 @@ public class ProductServiceImpl implements ProductService {
         Optional<Product> productOptional = productRepository.findById(id);
         if (productOptional.isPresent()) {
             Product product = productOptional.get();
-            Optional<Category> categoryOptional = categoyRepository.findByDescription(description);
+            Optional<Category> categoryOptional = categoryRepository.findByDescription(description);
             if (categoryOptional.isPresent()) {
                 Category category = categoryOptional.get();
                 product.removeProductCategory(category);
