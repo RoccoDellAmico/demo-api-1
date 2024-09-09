@@ -1,6 +1,9 @@
 package com.uade.demo.service;
 
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -39,6 +42,9 @@ public class AuthenticationService {
                 Optional<User> usuario = repository.findByEmail(request.getEmail());
                 if (usuario.isPresent())
                         throw new YourCustomException("ERROR! El usuario ya existe");
+                
+                if (!emailValidation(request.getEmail()))
+                        throw new YourCustomException("ERROR! Email invalido");
 
                 User user = new User(
                                 request.getEmail(), 
@@ -66,5 +72,12 @@ public class AuthenticationService {
                 return AuthenticationResponse.builder()
                                 .accessToken(jwtToken)
                                 .build();
+        }
+
+        private static boolean emailValidation(String email) {
+                String regex = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$";
+                Pattern pattern = Pattern.compile(regex);
+                Matcher matcher = pattern.matcher(email);
+                return matcher.matches();
         }
 }
