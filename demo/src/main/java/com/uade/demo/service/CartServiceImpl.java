@@ -92,6 +92,11 @@ public class CartServiceImpl implements CartService {
         Cart cart = cartRepository.findByCartId(cartId).orElseThrow(() -> new ItemNotFoundException());
         boolean hasProduct = cart.hasProduct(productId);
         if(hasProduct){
+            Product product = productRepository.findById(productId).orElseThrow(
+                () -> new ItemNotFoundException());
+            if(newQuantity > product.getStock()){
+                throw new APIException(product.getDescription() + " sin stock disponible");
+            }
             cart.updateProductQuantity(productId, newQuantity);
             cartRepository.save(cart);
             return mapToCartDTO(cart);
@@ -104,6 +109,11 @@ public class CartServiceImpl implements CartService {
         Cart cart = cartRepository.findByCartId(cartId).orElseThrow(() -> new ItemNotFoundException());
         boolean hasProduct = cart.hasProduct(productId);
         if(hasProduct){
+            Product product = productRepository.findById(productId).orElseThrow(
+                () -> new ItemNotFoundException());
+            if(cart.getCartProductQuantity(productId) + 1 > product.getStock()){
+                throw new APIException(product.getDescription() + " sin stock disponible");
+            }
             cart.updateProductQuantity(productId, cart.getCartProductQuantity(productId) + 1);
             cartRepository.save(cart);
             return mapToCartDTO(cart);
