@@ -34,7 +34,7 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findById(productId);
     }
 
-    public List<Product> getProductByCategory(Long categoryId) {
+    public List<Product> getProductByCategoryId(Long categoryId) {
         return productRepository.findByCategories(categoryId);
     }
 
@@ -51,6 +51,18 @@ public class ProductServiceImpl implements ProductService {
     public List<Product> getProductsByClub(String club) {
         List<Product> products = productRepository.findByClub(club);
         return products;
+    }
+
+    @Override
+    public Optional<List<Product>> getProductByCategoryDescr(String description) {
+        Optional<Category> categoryOptional = categoryRepository.findByDescription(description);
+        if (categoryOptional.isPresent()) {
+            Category category = categoryOptional.get();
+            Long categoryId = category.getId();
+            List<Product> products = productRepository.findByCategories(categoryId);
+            return Optional.of(products);
+        }
+        return Optional.empty();
     }
 
     public Optional<Product> addProductCategory(Long id, String description) 
