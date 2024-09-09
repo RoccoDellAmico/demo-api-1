@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 
 import com.uade.demo.entity.Product;
 import com.uade.demo.entity.Size;
+import com.uade.demo.exceptions.CategoryDuplicateException;
 
 public interface ProductService {
     public Page<Product> getProducts(PageRequest pageRequest);
@@ -22,7 +23,7 @@ public interface ProductService {
 
     public List<Product> getProductsByClub(String club);
 
-    public Optional<Product> addProductCategory(Long id, String description);
+    public Optional<Product> addProductCategory(Long id, String description) throws CategoryDuplicateException;
 
     public Optional<Product> deleteProductCategory(Long id, String description);
 

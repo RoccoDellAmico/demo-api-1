@@ -23,6 +23,7 @@ import org.springframework.data.domain.PageRequest;
 import com.uade.demo.entity.Product;
 import com.uade.demo.entity.Category;
 import com.uade.demo.entity.dto.ProductRequest;
+import com.uade.demo.exceptions.CategoryDuplicateException;
 import com.uade.demo.exceptions.ItemNotFoundException;
 
 import org.springframework.web.bind.annotation.PostMapping;
@@ -78,7 +79,8 @@ public class ProductController {
     }
 
     @PutMapping("admin/products/{productId}/category/update/add")
-    public ResponseEntity<Product> addProductCategory(@PathVariable Long productId, @RequestBody String categoryDescription) {
+    public ResponseEntity<Product> addProductCategory(@PathVariable Long productId, @RequestBody String categoryDescription) 
+        throws CategoryDuplicateException{
         Optional<Product> product = productService.addProductCategory(productId, categoryDescription);
         if(product.isPresent())
             return ResponseEntity.ok(product.get());
