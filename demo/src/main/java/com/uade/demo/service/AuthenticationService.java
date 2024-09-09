@@ -6,6 +6,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.uade.demo.controllers.YourCustomException;
 import com.uade.demo.controllers.auth.AuthenticationRequest;
 import com.uade.demo.controllers.auth.AuthenticationResponse;
 import com.uade.demo.controllers.auth.RegisterRequest;
@@ -25,8 +26,8 @@ public class AuthenticationService {
         private final JwtService jwtService;
         private final AuthenticationManager authenticationManager;
 
-        public AuthenticationResponse register(RegisterRequest request) 
-                throws UserDuplicateException {
+        public AuthenticationResponse register(RegisterRequest request) {
+                //throws UserDuplicateException {
                 /*var user = User.builder()
                                 .firstName(request.getFirstname())
                                 .lastName(request.getLastname())
@@ -37,7 +38,7 @@ public class AuthenticationService {
 
                 Optional<User> usuario = repository.findByEmail(request.getEmail());
                 if (usuario.isPresent())
-                        throw new UserDuplicateException();
+                        throw new YourCustomException("ERROR! El usuario ya existe");
 
                 User user = new User(
                                 request.getEmail(), 

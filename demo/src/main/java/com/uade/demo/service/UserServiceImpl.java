@@ -42,5 +42,5 @@ public class UserServiceImpl implements UserService {
             return Optional.of(user);
         }
         return Optional.empty();
-    }    
+    }
 }
