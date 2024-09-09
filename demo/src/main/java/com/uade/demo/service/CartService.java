@@ -2,8 +2,6 @@ package com.uade.demo.service;
 
 import java.util.List;
 
-import com.uade.demo.entity.Cart;
-import com.uade.demo.entity.CartProduct;
 import com.uade.demo.entity.dto.CartDTO;
 import com.uade.demo.entity.dto.CartProductDTO;
 import com.uade.demo.exceptions.ItemNotFoundException;

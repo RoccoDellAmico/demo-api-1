@@ -30,6 +30,7 @@ public class OrderServiceImpl implements OrderService{
         OrderDTO orderDTO = new OrderDTO();
         orderDTO.setOrderId(order.getId());
         orderDTO.setOrderProducts(mapToOrderProductDTO(order.getProducts()));
+        orderDTO.setUserEmail(order.getUser().getEmail());
         orderDTO.setTotal(order.getTotal());
         return orderDTO;
     }
@@ -41,7 +42,7 @@ public class OrderServiceImpl implements OrderService{
             orderProductDTO.setId(orderProduct.getId());
             orderProductDTO.setOrderId(orderProduct.getOrder().getId());
             orderProductDTO.setProduct(orderProduct.getProduct());
-            orderProduct.setQuantity(orderProduct.getQuantity());
+            orderProductDTO.setQuantity(orderProduct.getQuantity());
             orderProductDTOs.add(orderProductDTO);
         }
         return orderProductDTOs;
@@ -61,16 +62,23 @@ public class OrderServiceImpl implements OrderService{
     @Transactional(rollbackOn = Throwable.class)
     @Override
     public OrderDTO placeOrder(Long cartId) throws ItemNotFoundException {
-        Cart cart = cartRepository.findByCartId(cartId).orElseThrow(() -> new ItemNotFoundException());
+        Cart cart = cartRepository.findByCartId(cartId).orElseThrow(()-> new ItemNotFoundException());
+        Order order = createOrder(cart);
+        List<OrderProduct> orderProducts = mapToOrderProduct(cart.getCartProducts(), order);
+        for(OrderProduct orderProduct : orderProducts){
+            order.addOrderProduct(orderProduct);
+        }
+        Order savedOrder = orderRepository.save(order);
+        cart.notActive();
+        cartRepository.save(cart);
+        return mapToOrderDTO(savedOrder);
+    }
+
+    public Order createOrder(Cart cart){
         Order order = new Order();
         order.setUser(cart.getUser());
         order.setTotal(cart.getTotal());
-        List<OrderProduct> orderProducts = mapToOrderProduct(cart.getCartProducts(), order);
-        order.setProducts(orderProducts);
-        order = orderRepository.save(order);
-        cart.notActive();
-        cartRepository.save(cart);
-        return mapToOrderDTO(order);
+        return order;
     }
 
     public List<OrderProduct> mapToOrderProduct(List<CartProduct> cartProducts, Order order){
