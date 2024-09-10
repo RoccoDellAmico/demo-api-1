@@ -25,6 +25,8 @@ public interface ProductService {
 
     public Optional<List<Product>> getProductByCategoryDescr(String description); 
 
+    public List<Product> getProductBySize(Size size);
+
     public Optional<Product> addProductCategory(Long id, String description) throws CategoryDuplicateException;
 
     public Optional<Product> deleteProductCategory(Long id, String description);

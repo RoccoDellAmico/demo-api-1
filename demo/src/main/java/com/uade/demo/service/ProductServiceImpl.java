@@ -65,6 +65,11 @@ public class ProductServiceImpl implements ProductService {
         return Optional.empty();
     }
 
+    @Override
+    public List<Product> getProductBySize(Size size) {
+        return productRepository.findBySize(size);
+    }
+
     public Optional<Product> addProductCategory(Long id, String description) 
         throws CategoryDuplicateException {
         Optional<Product> productOptional = productRepository.findById(id);
