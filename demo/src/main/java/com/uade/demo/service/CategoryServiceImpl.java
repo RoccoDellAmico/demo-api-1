@@ -8,11 +8,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.uade.demo.controllers.YourCustomException;
 import com.uade.demo.entity.Category;
 import com.uade.demo.exceptions.CategoryDuplicateException;
 import com.uade.demo.repository.CategoryRepository;
 
-
+@Transactional
 @Service
 public class CategoryServiceImpl implements CategoryService {
 
@@ -37,6 +38,6 @@ public class CategoryServiceImpl implements CategoryService {
         Optional<Category> categories = categoryRepository.findByDescription(description);
         if (categories.isEmpty())
             return categoryRepository.save(new Category(description));
-        throw new CategoryDuplicateException();
+        throw new YourCustomException("Categoria duplicada");
     }
 }

@@ -21,6 +21,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 import com.uade.demo.entity.Product;
+import com.uade.demo.entity.Size;
 import com.uade.demo.entity.Category;
 import com.uade.demo.entity.dto.ProductRequest;
 import com.uade.demo.exceptions.CategoryDuplicateException;
@@ -54,9 +55,9 @@ public class ProductController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/public/categories/{categoryId}/products")
-    public ResponseEntity<List<Product>> getProduductByCategory(@PathVariable Long categoryId) {
-        List<Product> result = productService.getProductByCategory(categoryId);
+    @GetMapping("/public/categories/{categoryId}/products/id")
+    public ResponseEntity<List<Product>> getProduductByCategoryId(@PathVariable Long categoryId) {
+        List<Product> result = productService.getProductByCategoryId(categoryId);
         return ResponseEntity.ok(result);
     }
 
@@ -75,6 +76,20 @@ public class ProductController {
     @GetMapping("public/products/club/{club}")
     public ResponseEntity<List<Product>> getProductsByClub(@PathVariable String club) {
         List<Product> result = productService.getProductsByClub(club);
+        return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/public/categories/{description}/products/description")
+    public ResponseEntity<List<Product>> getProduductByCategoryDescr(@PathVariable String description) {
+        Optional<List<Product>> result = productService.getProductByCategoryDescr(description);
+        if(result.isPresent())
+            return ResponseEntity.ok(result.get());
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("public/products/size/{size}")
+    public ResponseEntity<List<Product>> getProductsBySize(@PathVariable Size size) {
+        List<Product> result = productService.getProductBySize(size);
         return ResponseEntity.ok(result);
     }
 

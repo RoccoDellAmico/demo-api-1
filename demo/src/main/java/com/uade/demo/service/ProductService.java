@@ -15,13 +15,17 @@ public interface ProductService {
 
     public Optional<Product> getProductById(Long productId);
 
-    public List<Product> getProductByCategory(Long categoryId);
+    public List<Product> getProductByCategoryId(Long categoryId);
 
     public List<Product> getProductsByPriceRange(double minPrice, double maxPrice);
 
     public List<Product> getProductsByLeague(String league);
 
     public List<Product> getProductsByClub(String club);
+
+    public Optional<List<Product>> getProductByCategoryDescr(String description); 
+
+    public List<Product> getProductBySize(Size size);
 
     public Optional<Product> addProductCategory(Long id, String description) throws CategoryDuplicateException;
 

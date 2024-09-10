@@ -9,15 +9,16 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.uade.demo.controllers.YourCustomException;
 import com.uade.demo.entity.Category;
 import com.uade.demo.entity.Product;
 import com.uade.demo.exceptions.CategoryDuplicateException;
-import com.uade.demo.exceptions.ItemNotFoundException;
 import com.uade.demo.repository.CategoryRepository;
 import com.uade.demo.entity.Size;
 import com.uade.demo.repository.ProductRepository;
 
 @Service
+@Transactional
 public class ProductServiceImpl implements ProductService {
 
     @Autowired
@@ -34,7 +35,7 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findById(productId);
     }
 
-    public List<Product> getProductByCategory(Long categoryId) {
+    public List<Product> getProductByCategoryId(Long categoryId) {
         return productRepository.findByCategories(categoryId);
     }
 
@@ -51,6 +52,23 @@ public class ProductServiceImpl implements ProductService {
     public List<Product> getProductsByClub(String club) {
         List<Product> products = productRepository.findByClub(club);
         return products;
+    }
+
+    @Override
+    public Optional<List<Product>> getProductByCategoryDescr(String description) {
+        Optional<Category> categoryOptional = categoryRepository.findByDescription(description);
+        if (categoryOptional.isPresent()) {
+            Category category = categoryOptional.get();
+            Long categoryId = category.getId();
+            List<Product> products = productRepository.findByCategories(categoryId);
+            return Optional.of(products);
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public List<Product> getProductBySize(Size size) {
+        return productRepository.findBySize(size);
     }
 
     public Optional<Product> addProductCategory(Long id, String description) 
@@ -70,7 +88,7 @@ public class ProductServiceImpl implements ProductService {
 
             List<Category> categories = product.getCategories();
             if (categories.contains(category)) {
-                throw new CategoryDuplicateException(); }
+                throw new YourCustomException("Categoria duplicada");}
             
             product.addProductCategory(category);
             productRepository.save(product);
