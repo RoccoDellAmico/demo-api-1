@@ -1,5 +1,6 @@
 package com.uade.demo.controllers;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.uade.demo.entity.User;
+import com.uade.demo.entity.dto.UserDTO;
+import com.uade.demo.exceptions.ItemNotFoundException;
 import com.uade.demo.service.UserService;
 
 @RestController
@@ -25,31 +28,32 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/admin/users")
+    /*@GetMapping("/admin/users")
     public ResponseEntity<Page<User>> getUsers(
             @RequestParam(required = false) Integer page,
             @RequestParam(required = false) Integer size) {
         if (page == null || size == null)
             return ResponseEntity.ok(userService.getUsers(PageRequest.of(0, Integer.MAX_VALUE)));
         return ResponseEntity.ok(userService.getUsers(PageRequest.of(page, size)));
+    }*/
+
+    @GetMapping("/admin/users")
+    public ResponseEntity<List<UserDTO>> getUsers() {
+        List<UserDTO> users = userService.getUsers();
+        return ResponseEntity.ok(users);
     }
 
     @GetMapping("/admin/users/{userId}")
-    public ResponseEntity<User> getUserById(@PathVariable Long userId) {
-        Optional<User> result = userService.getUserById(userId);
-        if (result.isPresent())
-            return ResponseEntity.ok(result.get());
-
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<UserDTO> getUserById(@PathVariable Long userId) throws ItemNotFoundException{
+        UserDTO result = userService.getUserById(userId);
+        return ResponseEntity.ok(result);
     }
 
     @PutMapping("admin/users/{userId}/password/update")
-    public ResponseEntity<User> updatePassword(@PathVariable Long userId,@RequestBody Map<String, String> request) {
+    public ResponseEntity<UserDTO> updatePassword(@PathVariable Long userId,@RequestBody Map<String, String> request) 
+        throws ItemNotFoundException{
         String newPassword = request.get("newPassword");
-        Optional<User> user = userService.updatePassword(userId, newPassword);
-        if (user.isPresent()) {
-            return ResponseEntity.ok(user.get());
-        }
-        return ResponseEntity.noContent().build();
+        UserDTO user = userService.updatePassword(userId, newPassword);
+        return ResponseEntity.ok(user);
     }
 }

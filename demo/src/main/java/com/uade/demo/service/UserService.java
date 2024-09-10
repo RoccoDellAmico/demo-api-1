@@ -1,16 +1,16 @@
 package com.uade.demo.service;
 
+import java.util.List;
 import java.util.Optional;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-
 import com.uade.demo.entity.User;
+import com.uade.demo.entity.dto.UserDTO;
+import com.uade.demo.exceptions.ItemNotFoundException;
 
 public interface UserService {
-    public Page<User> getUsers(PageRequest pageRequest);
+    public List<UserDTO> getUsers();
 
-    public Optional<User> getUserById(Long categoryId);
+    public UserDTO getUserById(Long categoryId) throws ItemNotFoundException;
 
-    public Optional<User> updatePassword(Long userId, String newPassword);
+    public UserDTO updatePassword(Long userId, String newPassword) throws ItemNotFoundException;
 }
