@@ -21,12 +21,12 @@ public interface ProductRepository extends JpaRepository<Product, Long>{
     @Query(value = "select p from Product p where p.size = ?1 and  p.stock > 0")
     List<Product> findBySize(Size size);
 
-    @Query(value = "select p from Product p where p.price > ?1 and p.price < ?2")
+    @Query(value = "select p from Product p where p.price > ?1 and p.price < ?2 and p.stock > 0")
     List<Product> findByPriceBetween(double minPrice, double maxPrice);
 
-    @Query(value = "select p from Product p where p.league = ?1")
+    @Query(value = "select p from Product p where p.league = ?1 and p.stock > 0")
     List<Product> findByLeague(String league);
 
-    @Query(value = "select p from Product p where p.club = ?1")
+    @Query(value = "select p from Product p where p.club = ?1 and p.stock > 0")
     List<Product> findByClub(String club);
 }
