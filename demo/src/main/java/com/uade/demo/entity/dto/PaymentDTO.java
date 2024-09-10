@@ -1,10 +1,11 @@
 package com.uade.demo.entity.dto;
 import lombok.Data;
-import java.util.Date;
+
+import java.time.LocalDate;
 
 @Data
 public class PaymentDTO {
-    private Date date;
+    private LocalDate date;
     private Long idOrder;
     private Long idUser;
     private String paymentMethod;
