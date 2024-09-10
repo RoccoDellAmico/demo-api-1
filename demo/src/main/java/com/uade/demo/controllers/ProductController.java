@@ -47,9 +47,17 @@ public class ProductController {
         return ResponseEntity.ok(productService.getProducts(PageRequest.of(page, size)));
     }
     
-    @GetMapping("/public/products/{productId}")
+    @GetMapping("/public/products/id/{productId}")
     public ResponseEntity<Product> getProductById(@PathVariable Long productId) {
         Optional<Product> result = productService.getProductById(productId);
+        if(result.isPresent())
+            return ResponseEntity.ok(result.get());
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/public/products/descrpcion({description}")
+    public ResponseEntity<Product> getProductByDescr(@PathVariable String description) {
+        Optional<Product> result = productService.getProductByDescr(description);
         if(result.isPresent())
             return ResponseEntity.ok(result.get());
         return ResponseEntity.noContent().build();
