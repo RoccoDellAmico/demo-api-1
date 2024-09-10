@@ -55,7 +55,7 @@ public class ProductController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/public/products/descrpcion({description}")
+    @GetMapping("/public/products/description/{description}")
     public ResponseEntity<Product> getProductByDescr(@PathVariable String description) {
         Optional<Product> result = productService.getProductByDescr(description);
         if(result.isPresent())
