@@ -35,6 +35,10 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findById(productId);
     }
 
+    public Optional<Product> getProductByDescr(String description){
+        return productRepository.findByDescription(description);
+    }
+
     public List<Product> getProductByCategoryId(Long categoryId) {
         return productRepository.findByCategories(categoryId);
     }

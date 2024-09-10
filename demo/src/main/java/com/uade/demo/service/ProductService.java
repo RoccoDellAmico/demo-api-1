@@ -15,6 +15,8 @@ public interface ProductService {
 
     public Optional<Product> getProductById(Long productId);
 
+    public Optional<Product> getProductByDescr(String description);
+
     public List<Product> getProductByCategoryId(Long categoryId);
 
     public List<Product> getProductsByPriceRange(double minPrice, double maxPrice);
