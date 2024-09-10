@@ -32,4 +32,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>{
 
     @Query(value = "select p from Product p where p.club = ?1 and p.stock > 0")
     List<Product> findByClub(String club);
+
+    @Query(value = "select p from Product p where p.stock > 0")
+    List<Product> findAvailableProducts();
 }

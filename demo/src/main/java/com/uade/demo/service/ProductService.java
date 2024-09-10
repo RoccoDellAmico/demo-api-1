@@ -44,4 +44,6 @@ public interface ProductService {
 
     public String deleteProduct(Long productId);
 
+    public List<Product> getProductsUser();
+
 }

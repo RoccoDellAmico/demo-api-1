@@ -39,7 +39,7 @@ public class ProductController {
     private ProductService productService;
 
 
-    @GetMapping("/public/products")
+    @GetMapping("/admin/products/get")
     public ResponseEntity<Page<Product>> getProducts(@RequestParam(required = false) Integer page,
             @RequestParam(required = false) Integer size) {
         if (page == null || size == null)
@@ -47,6 +47,12 @@ public class ProductController {
         return ResponseEntity.ok(productService.getProducts(PageRequest.of(page, size)));
     }
     
+    @GetMapping("/public/products/get")
+    public ResponseEntity<List<Product>> getProductsUser() {
+        List<Product> result = productService.getProductsUser();
+        return ResponseEntity.ok(result);
+    }
+
     @GetMapping("/public/products/id/{productId}")
     public ResponseEntity<Product> getProductById(@PathVariable Long productId) {
         Optional<Product> result = productService.getProductById(productId);

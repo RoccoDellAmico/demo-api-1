@@ -31,6 +31,11 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findAll(pageRequest);
     }
 
+    public List<Product> getProductsUser(){
+        List<Product> products = productRepository.findAvailableProducts();
+        return products;
+    }
+
     public Optional<Product> getProductById(Long productId){
         return productRepository.findById(productId);
     }
