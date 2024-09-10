@@ -12,12 +12,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.uade.demo.entity.Category;
 import com.uade.demo.entity.Product;
 import com.uade.demo.exceptions.CategoryDuplicateException;
-import com.uade.demo.exceptions.ItemNotFoundException;
 import com.uade.demo.repository.CategoryRepository;
 import com.uade.demo.entity.Size;
 import com.uade.demo.repository.ProductRepository;
 
 @Service
+@Transactional
 public class ProductServiceImpl implements ProductService {
 
     @Autowired

@@ -12,7 +12,7 @@ import com.uade.demo.entity.Category;
 import com.uade.demo.exceptions.CategoryDuplicateException;
 import com.uade.demo.repository.CategoryRepository;
 
-
+@Transactional
 @Service
 public class CategoryServiceImpl implements CategoryService {
 

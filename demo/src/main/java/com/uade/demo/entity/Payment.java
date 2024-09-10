@@ -1,6 +1,6 @@
 package com.uade.demo.entity;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,13 +14,11 @@ public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Date date;
+    private LocalDate date;
     private Long idOrder;
     private Long idUser;
     private String paymentMethod;
     private double total;
-    private String details;
-
 
     public Payment(){}
 }
