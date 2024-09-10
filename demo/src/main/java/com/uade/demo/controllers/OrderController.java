@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.uade.demo.entity.dto.CartDTO;
 import com.uade.demo.entity.dto.OrderDTO;
 import com.uade.demo.exceptions.ItemNotFoundException;
 import com.uade.demo.service.OrderService;

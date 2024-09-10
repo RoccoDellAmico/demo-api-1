@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.uade.demo.controllers.YourCustomException;
 import com.uade.demo.entity.Category;
 import com.uade.demo.entity.Product;
 import com.uade.demo.exceptions.CategoryDuplicateException;
@@ -87,7 +88,7 @@ public class ProductServiceImpl implements ProductService {
 
             List<Category> categories = product.getCategories();
             if (categories.contains(category)) {
-                throw new CategoryDuplicateException(); }
+                throw new YourCustomException("Categoria duplicada");}
             
             product.addProductCategory(category);
             productRepository.save(product);
