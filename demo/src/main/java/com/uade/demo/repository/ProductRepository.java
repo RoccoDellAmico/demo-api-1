@@ -12,7 +12,7 @@ import com.uade.demo.entity.Size;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long>{
     
-    @Query(value = "select p from Product p where p.id = ?1 and p.stock > 0")
+    @Query(value = "select p from Product p where p.id = ?1")
     Optional<Product> findById(Long id);
 
     @Query(value = "SELECT p.* FROM Product p JOIN Product_Category pc ON p.id = pc.product_Id JOIN Category c ON pc.category_Id = c.id WHERE c.id = ?1 AND p.stock > 0", nativeQuery = true)
