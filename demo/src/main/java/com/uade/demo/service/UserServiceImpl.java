@@ -58,14 +58,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO updatePassword(Long userId, String newPassword) throws ItemNotFoundException {
         User user = userRepository.findById(userId).orElseThrow(()-> new ItemNotFoundException());
-        /*if (userOptional.isPresent()) {
-            User user = userOptional.get();
-            String encodedPassword = passwordEncoder.encode(newPassword);
-            user.setPassword(encodedPassword);
-            userRepository.save(user);
-            return Optional.of(user);
-        }
-        return Optional.empty();*/
         String encodedPassword = passwordEncoder.encode(newPassword);
         user.setPassword(encodedPassword);
         userRepository.save(user);

@@ -28,15 +28,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    /*@GetMapping("/admin/users")
-    public ResponseEntity<Page<User>> getUsers(
-            @RequestParam(required = false) Integer page,
-            @RequestParam(required = false) Integer size) {
-        if (page == null || size == null)
-            return ResponseEntity.ok(userService.getUsers(PageRequest.of(0, Integer.MAX_VALUE)));
-        return ResponseEntity.ok(userService.getUsers(PageRequest.of(page, size)));
-    }*/
-
     @GetMapping("/admin/users")
     public ResponseEntity<List<UserDTO>> getUsers() {
         List<UserDTO> users = userService.getUsers();
@@ -49,7 +40,7 @@ public class UserController {
         return ResponseEntity.ok(result);
     }
 
-    @PutMapping("admin/users/{userId}/password/update")
+    @PutMapping("/public/users/{userId}/password/update")
     public ResponseEntity<UserDTO> updatePassword(@PathVariable Long userId,@RequestBody Map<String, String> request) 
         throws ItemNotFoundException{
         String newPassword = request.get("newPassword");
