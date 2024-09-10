@@ -63,24 +63,6 @@ public class Cart {
         cartProduct.setCart(this);
     }
 
-    /* Metodo AddProduct verificando el stock
-    public void addProduct(Product product, Integer quantity, String size) {
-        Integer availableStock = product.getStock().get(size);
-    
-        if (availableStock == null) {
-            System.out.println("El tamaño especificado no está disponible.");
-        } else if (availableStock < quantity) {
-            System.out.println("No hay suficiente stock disponible para la cantidad solicitada.");
-        } else {
-            if (cart.containsKey(product)) {
-                cart.put(product, cart.get(product) + quantity);
-            } else {
-                cart.put(product, quantity);
-            }
-            product.getStock().put(size, availableStock - quantity); // Reduce stock
-        }
-    }
-    */
     public void removeProduct(Product product){
         int index = -1;
         for(CartProduct cartProduct : cartProducts){

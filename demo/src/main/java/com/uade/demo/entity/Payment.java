@@ -19,7 +19,6 @@ public class Payment {
     private Long idUser;
     private String paymentMethod;
     private double total;
-    private String details;
 
 
     public Payment(){}
