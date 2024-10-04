@@ -1,6 +1,11 @@
 package com.uade.demo.entity;
 
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -11,6 +16,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.MapKeyColumn;
 import lombok.Data;
 
 @Data
@@ -24,10 +30,16 @@ public class Product {
 
     private double price;
 
-    @Enumerated(EnumType.STRING)
+    /*@Enumerated(EnumType.STRING)
     private Size size;
 
-    private int stock;
+    private int stock;*/
+
+    @ElementCollection
+    @CollectionTable(name = "product_stock")
+    @MapKeyColumn(name = "size")
+    @Column(name = "stock")
+    private Map<Size, Integer> productStock = new HashMap<>();
 
     private String club;
 
@@ -44,12 +56,11 @@ public class Product {
     )   
     private List<Category> categories;
 
-    public Product(String description, double price, Size size, int stock,
+    public Product(String description, double price, Map<Size, Integer> productStock,
         String club, String league, List<String> photos) {
         this.description = description;
         this.price = price;
-        this.size = size;
-        this.stock = stock;
+        this.productStock = productStock;
         this.club = club;
         this.league = league;
         this.photos = photos;
@@ -61,6 +72,26 @@ public class Product {
 
     public void removeProductCategory(Category category) {
         categories.remove(category);
+    }
+
+    public void updateProductStock(Size size, int stock){
+        if(productStock.containsKey(size)){
+            productStock.put(size, stock);
+        }
+    }
+
+    public int getStockBySize(Size size){
+        if(productStock.containsKey(size))
+            return productStock.get(size);
+        else{
+            return -1;
+        }
+    }
+
+    public void addProductSize(Size size, int stock){
+        if(!productStock.containsKey(size)){
+            productStock.put(size, stock);
+        }
     }
 
     public Product(){}

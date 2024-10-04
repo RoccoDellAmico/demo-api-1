@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.uade.demo.entity.Product;
+import com.uade.demo.entity.Size;
 import com.uade.demo.entity.User;
 import com.uade.demo.entity.dto.CartDTO;
 import com.uade.demo.entity.dto.CartProductDTO;
@@ -53,7 +54,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public CartDTO addProduct(Long cartId, Long productId, int quantity) throws ItemNotFoundException {
+    public CartDTO addProduct(Long cartId, Long productId, Size size,int quantity) throws ItemNotFoundException {
         Cart cart = cartRepository.findByCartId(cartId).orElseThrow(() -> new ItemNotFoundException());
         Product product = productRepository.findById(productId).orElseThrow(
             () -> new ItemNotFoundException());
@@ -62,7 +63,7 @@ public class CartServiceImpl implements CartService {
             CartProduct cartProduct = new CartProduct();
             cartProduct.setCart(cart);
             cartProduct.setProduct(product);
-            if(quantity > product.getStock()){
+            if(quantity > product.getStockBySize(size)){
                 throw new YourCustomException(product.getDescription() + " sin stock disponible");
             }
             cartProduct.setQuantity(quantity);
@@ -88,13 +89,13 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public CartDTO updateProductQuantity(Long cartId, Long productId, int newQuantity) throws ItemNotFoundException {
+    public CartDTO updateProductQuantity(Long cartId, Size size,Long productId, int newQuantity) throws ItemNotFoundException {
         Cart cart = cartRepository.findByCartId(cartId).orElseThrow(() -> new ItemNotFoundException());
         boolean hasProduct = cart.hasProduct(productId);
         if(hasProduct){
             Product product = productRepository.findById(productId).orElseThrow(
                 () -> new ItemNotFoundException());
-            if(newQuantity > product.getStock()){
+            if(newQuantity > product.getStockBySize(size)){
                 throw new YourCustomException(product.getDescription() + " sin stock disponible");
             }
             cart.updateProductQuantity(productId, newQuantity);
@@ -105,13 +106,13 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public CartDTO addOneProduct(Long cartId, Long productId) throws ItemNotFoundException{
+    public CartDTO addOneProduct(Long cartId, Size size,Long productId) throws ItemNotFoundException{
         Cart cart = cartRepository.findByCartId(cartId).orElseThrow(() -> new ItemNotFoundException());
         boolean hasProduct = cart.hasProduct(productId);
         if(hasProduct){
             Product product = productRepository.findById(productId).orElseThrow(
                 () -> new ItemNotFoundException());
-            if(cart.getCartProductQuantity(productId) + 1 > product.getStock()){
+            if(cart.getCartProductQuantity(productId) + 1 > product.getStockBySize(size)){
                 throw new YourCustomException(product.getDescription() + " sin stock disponible");
             }
             cart.updateProductQuantity(productId, cart.getCartProductQuantity(productId) + 1);

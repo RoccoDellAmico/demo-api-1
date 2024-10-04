@@ -67,11 +67,12 @@ public class OrderServiceImpl implements OrderService{
         Order order = createOrder(cart);
         List<OrderProduct> orderProducts = mapToOrderProduct(cart.getCartProducts(), order);
         for(OrderProduct orderProduct : orderProducts){
-            if(orderProduct.getQuantity() > orderProduct.getProduct().getStock()){
+            if(orderProduct.getQuantity() > orderProduct.getProduct().getStockBySize(orderProduct.getSize())){
                 throw new YourCustomException(orderProduct.getProduct().getDescription() + " sin stock disponible");
             }
             order.addOrderProduct(orderProduct);
-            orderProduct.getProduct().setStock(orderProduct.getProduct().getStock() - orderProduct.getQuantity());
+            orderProduct.getProduct().updateProductStock(orderProduct.getSize(), 
+                orderProduct.getProduct().getStockBySize(orderProduct.getSize())-orderProduct.getQuantity());
         }
         Order savedOrder = orderRepository.save(order);
         cart.changeState();

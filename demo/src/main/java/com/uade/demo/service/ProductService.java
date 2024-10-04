@@ -1,49 +1,48 @@
 package com.uade.demo.service;
 
-import java.util.Optional;
 import java.util.List;
+import java.util.Map;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-
-import com.uade.demo.entity.Product;
 import com.uade.demo.entity.Size;
+import com.uade.demo.entity.dto.ProductDTO;
 import com.uade.demo.exceptions.CategoryDuplicateException;
 
 public interface ProductService {
-    public Page<Product> getProducts(PageRequest pageRequest);
+    public List<ProductDTO> getProducts();
 
-    public Optional<Product> getProductById(Long productId);
+    public ProductDTO getProductById(Long productId);
 
-    public Optional<Product> getProductByDescr(String description);
+    public ProductDTO getProductByDescr(String description);
 
-    public List<Product> getProductByCategoryId(Long categoryId);
+    public List<ProductDTO> getProductByCategoryId(Long categoryId);
 
-    public List<Product> getProductsByPriceRange(double minPrice, double maxPrice);
+    public List<ProductDTO> getProductsByPriceRange(double minPrice, double maxPrice);
 
-    public List<Product> getProductsByLeague(String league);
+    public List<ProductDTO> getProductsByLeague(String league);
 
-    public List<Product> getProductsByClub(String club);
+    public List<ProductDTO> getProductsByClub(String club);
 
-    public Optional<List<Product>> getProductByCategoryDescr(String description); 
+    public List<ProductDTO> getProductByCategoryDescr(String description); 
 
-    public List<Product> getProductBySize(Size size);
+    public List<ProductDTO> getProductBySize(Size size);
 
-    public Optional<Product> addProductCategory(Long id, String description) throws CategoryDuplicateException;
+    public ProductDTO addProductCategory(Long id, String description) throws CategoryDuplicateException;
 
-    public Optional<Product> deleteProductCategory(Long id, String description);
+    public ProductDTO deleteProductCategory(Long id, String description);
 
-    public Optional<Product> updateProductPrice(Long id, double price);
+    public ProductDTO updateProductPrice(Long id, double price);
 
-    public Optional<Product> updateProductStock(Long id, int stock);
+    public ProductDTO updateProductStock(Long id, Size size, int stock);
 
     //public void saveProduct(Product newProduct);
 
-    public Product createProduct(String description, double price, Size size, int stock,
+    public ProductDTO createProduct(String description, double price, Map<Size, Integer> productStock,
     String club, String league, List<String> photos);
 
     public String deleteProduct(Long productId);
 
-    public List<Product> getProductsUser();
+    public List<ProductDTO> getProductsUser();
+
+    public ProductDTO addProductSize(Long id, Size size, int stock);
 
 }

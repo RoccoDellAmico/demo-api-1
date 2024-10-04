@@ -8,9 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import com.uade.demo.service.CategoryService;
 import com.uade.demo.service.ProductService;
+
+import io.micrometer.core.ipc.http.HttpSender.Response;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,10 +22,10 @@ import org.springframework.data.domain.PageRequest;
 
 import com.uade.demo.entity.Product;
 import com.uade.demo.entity.Size;
-import com.uade.demo.entity.Category;
+import com.uade.demo.entity.dto.AddSizeRequest;
+import com.uade.demo.entity.dto.ProductDTO;
 import com.uade.demo.entity.dto.ProductRequest;
 import com.uade.demo.exceptions.CategoryDuplicateException;
-import com.uade.demo.exceptions.ItemNotFoundException;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -40,118 +40,96 @@ public class ProductController {
 
 
     @GetMapping("/admin/products/get")
-    public ResponseEntity<Page<Product>> getProducts(@RequestParam(required = false) Integer page,
-            @RequestParam(required = false) Integer size) {
-        if (page == null || size == null)
-                return ResponseEntity.ok(productService.getProducts(PageRequest.of(0, Integer.MAX_VALUE)));
-        return ResponseEntity.ok(productService.getProducts(PageRequest.of(page, size)));
+    public ResponseEntity<List<ProductDTO>> getProducts() {
+        return ResponseEntity.ok(productService.getProducts());
     }
     
     @GetMapping("/public/products/get")
-    public ResponseEntity<List<Product>> getProductsUser() {
-        List<Product> result = productService.getProductsUser();
-        return ResponseEntity.ok(result);
+    public ResponseEntity<List<ProductDTO>> getProductsUser() {
+        return ResponseEntity.ok(productService.getProductsUser());
     }
 
     @GetMapping("/public/products/id/{productId}")
-    public ResponseEntity<Product> getProductById(@PathVariable Long productId) {
-        Optional<Product> result = productService.getProductById(productId);
-        if(result.isPresent())
-            return ResponseEntity.ok(result.get());
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<ProductDTO> getProductById(@PathVariable Long productId) {
+        return ResponseEntity.ok(productService.getProductById(productId));
     }
 
     @GetMapping("/public/products/description/{description}")
-    public ResponseEntity<Product> getProductByDescr(@PathVariable String description) {
-        Optional<Product> result = productService.getProductByDescr(description);
-        if(result.isPresent())
-            return ResponseEntity.ok(result.get());
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<ProductDTO> getProductByDescr(@PathVariable String description) {
+        return ResponseEntity.ok(productService.getProductByDescr(description));
     }
 
     @GetMapping("/public/categories/{categoryId}/products/id")
-    public ResponseEntity<List<Product>> getProduductByCategoryId(@PathVariable Long categoryId) {
-        List<Product> result = productService.getProductByCategoryId(categoryId);
-        return ResponseEntity.ok(result);
+    public ResponseEntity<List<ProductDTO>> getProduductByCategoryId(@PathVariable Long categoryId) {
+        return ResponseEntity.ok(productService.getProductByCategoryId(categoryId));
     }
 
     @GetMapping("public/products/price/{minPrice}/{maxPrice}")
-    public ResponseEntity<List<Product>> getProductsByPriceRange(@PathVariable double minPrice, 
+    public ResponseEntity<List<ProductDTO>> getProductsByPriceRange(@PathVariable double minPrice, 
         @PathVariable double maxPrice) {
-        List<Product> result = productService.getProductsByPriceRange(minPrice, maxPrice);
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(productService.getProductsByPriceRange(minPrice, maxPrice));
     }
 
     @GetMapping("public/products/league/{league}")
-    public ResponseEntity<List<Product>> getProductsByLeague(@PathVariable String league) {
-        List<Product> result = productService.getProductsByLeague(league);
-        return ResponseEntity.ok(result);
+    public ResponseEntity<List<ProductDTO>> getProductsByLeague(@PathVariable String league) {
+        return ResponseEntity.ok(productService.getProductsByLeague(league));
     }
     
     @GetMapping("public/products/club/{club}")
-    public ResponseEntity<List<Product>> getProductsByClub(@PathVariable String club) {
-        List<Product> result = productService.getProductsByClub(club);
-        return ResponseEntity.ok(result);
+    public ResponseEntity<List<ProductDTO>> getProductsByClub(@PathVariable String club) {
+        return ResponseEntity.ok(productService.getProductsByClub(club));
     }
 
     @GetMapping("/public/categories/{description}/products/description")
-    public ResponseEntity<List<Product>> getProduductByCategoryDescr(@PathVariable String description) {
-        Optional<List<Product>> result = productService.getProductByCategoryDescr(description);
-        if(result.isPresent())
-            return ResponseEntity.ok(result.get());
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<List<ProductDTO>> getProduductByCategoryDescr(@PathVariable String description) {
+        return ResponseEntity.ok(productService.getProductByCategoryDescr(description));
     }
 
     @GetMapping("public/products/size/{size}")
-    public ResponseEntity<List<Product>> getProductsBySize(@PathVariable Size size) {
-        List<Product> result = productService.getProductBySize(size);
-        return ResponseEntity.ok(result);
+    public ResponseEntity<List<ProductDTO>> getProductsBySize(@PathVariable Size size) {
+        return ResponseEntity.ok(productService.getProductBySize(size));
     }
 
     @PutMapping("admin/products/{productId}/category/update/add")
-    public ResponseEntity<Product> addProductCategory(@PathVariable Long productId, @RequestBody String categoryDescription) 
+    public ResponseEntity<ProductDTO> addProductCategory(@PathVariable Long productId, @RequestBody String categoryDescription) 
         throws CategoryDuplicateException{
-        Optional<Product> product = productService.addProductCategory(productId, categoryDescription);
-        if(product.isPresent())
-            return ResponseEntity.ok(product.get());
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(productService.addProductCategory(productId, categoryDescription));
     }
 
     @PutMapping("admin/products/{productId}/category/update/delete")
-    public ResponseEntity<Product> deleteProductCategory(@PathVariable Long productId, @RequestBody String categoryDescription)   {
-        Optional<Product> product = productService.deleteProductCategory(productId, categoryDescription);
-        if(product.isPresent())
-            return ResponseEntity.ok(product.get());
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<ProductDTO> deleteProductCategory(@PathVariable Long productId, @RequestBody String categoryDescription)   {
+        return ResponseEntity.ok(productService.deleteProductCategory(productId, categoryDescription));
     }
 
     @PutMapping("/admin/products/{productId}/price/{newPrice}/update")
-    public ResponseEntity<Product> updateProductPrice(@PathVariable Long productId, @PathVariable double newPrice) {
-        Optional<Product> product = productService.updateProductPrice(productId, newPrice);
-        if(product.isPresent())
-            return ResponseEntity.ok(product.get());
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<ProductDTO> updateProductPrice(@PathVariable Long productId, @PathVariable double newPrice) {
+        return ResponseEntity.ok(productService.updateProductPrice(productId, newPrice));
     }
 
     @PutMapping("/admin/products/{productId}/stock/{newStock}/update")
-    public ResponseEntity<Product> updateProductStock(@PathVariable Long productId, @PathVariable int newStock) {
-        Optional<Product> product = productService.updateProductStock(productId, newStock);
-        if(product.isPresent())
-            return ResponseEntity.ok(product.get());
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<ProductDTO> updateProductStock(@PathVariable Long productId, @PathVariable Size size, 
+        @PathVariable int newStock) {
+        return ResponseEntity.ok(productService.updateProductStock(productId, size, newStock));
     }
 
     @PostMapping("/admin/products")
-    public ResponseEntity<Object> createProduct(@RequestBody ProductRequest productRequest) {
-        Product result = productService.createProduct(productRequest.getDescription(), productRequest.getPrice(), 
-            productRequest.getSize(), productRequest.getStock(), 
-            productRequest.getClub(), productRequest.getLeague(), productRequest.getPhotos());
-        return ResponseEntity.created(URI.create("/products/" + result.getId())).body(result);
+    public ResponseEntity<ProductDTO> createProduct(@RequestBody ProductRequest productRequest) {
+        ProductDTO product = productService.createProduct(productRequest.getDescription(), productRequest.getPrice(), 
+            productRequest.getProductStock(), productRequest.getClub(), productRequest.getLeague(), 
+            productRequest.getPhotos());
+        return ResponseEntity.ok(product);
     }
     
     @DeleteMapping("/admin/products/{productId}")
     public ResponseEntity<Object> deleteProductById(@PathVariable Long productId) {
         productService.deleteProduct(productId);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/admin/products/addSize")
+    public ResponseEntity<ProductDTO> addProductSize(@RequestBody AddSizeRequest addSizeRequest) {
+        ProductDTO product = productService.addProductSize(addSizeRequest.getProductId(), addSizeRequest.getSize(), 
+            addSizeRequest.getStock());
+        return ResponseEntity.ok(product);
     }
 }

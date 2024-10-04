@@ -1,8 +1,6 @@
 package com.uade.demo.entity.dto;
 import lombok.Data;
 
-import java.time.LocalDate;
-
 @Data
 public class PaymentDTO {
     private Long idOrder;

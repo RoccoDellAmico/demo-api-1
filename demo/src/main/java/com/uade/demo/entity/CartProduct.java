@@ -20,6 +20,7 @@ public class CartProduct {
     @ManyToOne
     private Product product;
     private int quantity;
+    private Size size;
 
     public CartProduct(){}
 }

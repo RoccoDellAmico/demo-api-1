@@ -1,7 +1,9 @@
 package com.uade.demo.service;
 
 import java.util.Optional;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,6 +17,7 @@ import com.uade.demo.entity.Product;
 import com.uade.demo.exceptions.CategoryDuplicateException;
 import com.uade.demo.repository.CategoryRepository;
 import com.uade.demo.entity.Size;
+import com.uade.demo.entity.dto.ProductDTO;
 import com.uade.demo.repository.ProductRepository;
 
 @Service
@@ -27,60 +30,71 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    public Page<Product> getProducts(PageRequest pageRequest){
-        return productRepository.findAll(pageRequest);
+    public List<ProductDTO> getProducts(){
+        List<Product> products = productRepository.findAll();
+        return mapToListProductDTOs(products);
     }
 
-    public List<Product> getProductsUser(){
+    public List<ProductDTO> getProductsUser(){
         List<Product> products = productRepository.findAvailableProducts();
-        return products;
+        return mapToListProductDTOs(products);
     }
 
-    public Optional<Product> getProductById(Long productId){
-        return productRepository.findById(productId);
+    public ProductDTO getProductById(Long productId){
+        Optional<Product> productOptional = productRepository.findById(productId);
+        if(productOptional.isPresent()){
+            Product product = productOptional.get();
+            return mapToProductDTO(product);
+        }
+        return null;
     }
 
-    public Optional<Product> getProductByDescr(String description){
-        return productRepository.findByDescription(description);
+    public ProductDTO getProductByDescr(String description){
+        Product product = productRepository.findByDescription(description);
+        return mapToProductDTO(product);
     }
 
-    public List<Product> getProductByCategoryId(Long categoryId) {
-        return productRepository.findByCategories(categoryId);
+    public List<ProductDTO> getProductByCategoryId(Long categoryId) {
+        List<Product> products = productRepository.findByCategories(categoryId);
+        return mapToListProductDTOs(products);
     }
 
-    public List<Product> getProductsByPriceRange(double minPrice, double maxPrice) {
+    public List<ProductDTO> getProductsByPriceRange(double minPrice, double maxPrice) {
         List<Product> products = productRepository.findByPriceBetween(minPrice, maxPrice);
-        return products;
+        return mapToListProductDTOs(products);
     }
 
-    public List<Product> getProductsByLeague(String league) {
+    public List<ProductDTO> getProductsByLeague(String league) {
         List<Product> products = productRepository.findByLeague(league);
-        return products;
+        return mapToListProductDTOs(products);
     }
 
-    public List<Product> getProductsByClub(String club) {
+    public List<ProductDTO> getProductsByClub(String club) {
         List<Product> products = productRepository.findByClub(club);
-        return products;
+        return mapToListProductDTOs(products);
     }
 
     @Override
-    public Optional<List<Product>> getProductByCategoryDescr(String description) {
+    public List<ProductDTO> getProductByCategoryDescr(String description) {
         Optional<Category> categoryOptional = categoryRepository.findByDescription(description);
         if (categoryOptional.isPresent()) {
             Category category = categoryOptional.get();
             Long categoryId = category.getId();
             List<Product> products = productRepository.findByCategories(categoryId);
-            return Optional.of(products);
+            List<ProductDTO> productDTOs = mapToListProductDTOs(products);
+            return productDTOs;
         }
-        return Optional.empty();
+        return null;
     }
 
     @Override
-    public List<Product> getProductBySize(Size size) {
-        return productRepository.findBySize(size);
+    public List<ProductDTO> getProductBySize(Size size) {
+        List<Product> products = productRepository.findBySize(size);
+        List<ProductDTO> productDTOs = mapToListProductDTOs(products);
+        return productDTOs;
     }
 
-    public Optional<Product> addProductCategory(Long id, String description) 
+    public ProductDTO addProductCategory(Long id, String description) 
         throws CategoryDuplicateException {
         Optional<Product> productOptional = productRepository.findById(id);
         if (productOptional.isPresent()){
@@ -101,13 +115,13 @@ public class ProductServiceImpl implements ProductService {
             
             product.addProductCategory(category);
             productRepository.save(product);
-            return Optional.of(product);
+            return mapToProductDTO(product);
         }
-        return Optional.empty();
+        return null;
     }
 
     @Override
-    public Optional<Product> deleteProductCategory(Long id, String description) {
+    public ProductDTO deleteProductCategory(Long id, String description) {
         Optional<Product> productOptional = productRepository.findById(id);
         if (productOptional.isPresent()) {
             Product product = productOptional.get();
@@ -116,41 +130,43 @@ public class ProductServiceImpl implements ProductService {
                 Category category = categoryOptional.get();
                 product.removeProductCategory(category);
                 productRepository.save(product);
-                return Optional.of(product);
+                return mapToProductDTO(product);
             }
-            return Optional.of(product);
+            return mapToProductDTO(product);
         }
-        return Optional.empty();
+        return null;
     }
 
     @Override
-    public Optional<Product> updateProductPrice(Long id, double price) {
+    public ProductDTO updateProductPrice(Long id, double price) {
         Optional<Product> productOptional = productRepository.findById(id);
         if (productOptional.isPresent()){
             Product product = productOptional.get();
             product.setPrice(price);
             productRepository.save(product);
-            return Optional.of(product);
+            return mapToProductDTO(product);
         }
-        return Optional.empty();
+        return null;
     }
 
     @Override
-    public Optional<Product> updateProductStock(Long id, int stock) {
+    public ProductDTO updateProductStock(Long id, Size size, int stock) {
         Optional<Product> productOptional = productRepository.findById(id);
         if (productOptional.isPresent()){
             Product product = productOptional.get();
-            product.setStock(stock);
+            product.updateProductStock(size, stock);
             productRepository.save(product);
-            return Optional.of(product);
+            return mapToProductDTO(product);
         }
-        return Optional.empty();
+        return null;
     }
 
     @Transactional(rollbackFor = Throwable.class)
-    public Product createProduct(String description, double price, Size size, int stock,
+    public ProductDTO createProduct(String description, double price, Map<Size, Integer> productStock,
     String club, String league, List<String> photos) {
-        return productRepository.save(new Product(description, price, size, stock, club, league,photos));
+        Product product = new Product(description, price, productStock, club, league, photos);
+        productRepository.save(product);
+        return mapToProductDTO(product);
     }
 
     @Transactional(rollbackFor = Throwable.class)
@@ -160,6 +176,33 @@ public class ProductServiceImpl implements ProductService {
         productRepository.delete(product);
 
         return "Product with productId: " + productId + " deleted successfully !!!";
+    }
+
+    public ProductDTO addProductSize(Long id, Size size, int stock){
+        Product product = productRepository.findById(id).orElse(null);
+        if(product != null){
+            product.addProductSize(size, stock);
+            productRepository.save(product);
+            return mapToProductDTO(product);
+        }
+        return null;
+    }
+
+    private ProductDTO mapToProductDTO(Product product){
+        ProductDTO productDTO = new ProductDTO();
+        productDTO.setId(product.getId());
+        productDTO.setDescription(product.getDescription());
+        productDTO.setPrice(product.getPrice());
+        productDTO.setPhotos(product.getPhotos());
+        return productDTO;
+    }
+
+    private List<ProductDTO> mapToListProductDTOs(List<Product> products){
+        List<ProductDTO> productDTOs = new ArrayList<>();
+        for(Product product : products){
+            productDTOs.add(mapToProductDTO(product));
+        }
+        return productDTOs;
     }
 
 }

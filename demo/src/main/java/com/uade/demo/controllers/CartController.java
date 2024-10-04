@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.uade.demo.entity.Size;
 import com.uade.demo.entity.dto.CartDTO;
 import com.uade.demo.entity.dto.CartProductDTO;
 import com.uade.demo.exceptions.ItemNotFoundException;
@@ -50,15 +51,15 @@ public class CartController {
     }
     
     @PutMapping("/public/carts/{cartId}/products/{productId}/quantity/{quantity}")
-    public ResponseEntity<Object> addProductToCart(@PathVariable Long cartId, @PathVariable Long productId,
-        @PathVariable int quantity) throws ItemNotFoundException {
-        CartDTO cart = cartService.addProduct(cartId, productId, quantity);
+    public ResponseEntity<Object> addProductToCart(@PathVariable Long cartId, @PathVariable Size size, 
+        @PathVariable Long productId, @PathVariable int quantity) throws ItemNotFoundException {
+        CartDTO cart = cartService.addProduct(cartId, productId, size, quantity);
         return ResponseEntity.ok(cart);
     }
 
     @PutMapping("/public/carts/{cartId}/products/{productId}/addOne")
-    public ResponseEntity<Object> addOneProduct(@PathVariable Long cartId, @PathVariable Long productId) throws ItemNotFoundException {
-        CartDTO cart = cartService.addOneProduct(cartId, productId);
+    public ResponseEntity<Object> addOneProduct(@PathVariable Long cartId, @PathVariable Size size, @PathVariable Long productId) throws ItemNotFoundException {
+        CartDTO cart = cartService.addOneProduct(cartId, size,productId);
         return ResponseEntity.ok(cart);
     }
 
@@ -70,9 +71,9 @@ public class CartController {
     }
 
     @PutMapping("/public/carts/{cartId}/products/{productId}/quantity/{newQuantity}/update")
-    public ResponseEntity<Object> updateProductQuantity(@PathVariable Long cartId, 
+    public ResponseEntity<Object> updateProductQuantity(@PathVariable Long cartId, @PathVariable Size size,
         @PathVariable Long productId, @PathVariable int newQuantity) throws ItemNotFoundException {
-        CartDTO cart = cartService.updateProductQuantity(cartId, productId, newQuantity);
+        CartDTO cart = cartService.updateProductQuantity(cartId, size, productId, newQuantity);
         return ResponseEntity.ok(cart);
     }
 
