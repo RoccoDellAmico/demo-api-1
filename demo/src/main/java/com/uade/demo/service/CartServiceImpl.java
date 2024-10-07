@@ -66,6 +66,9 @@ public class CartServiceImpl implements CartService {
             if(quantity > product.getStockBySize(size)){
                 throw new YourCustomException(product.getDescription() + " sin stock disponible");
             }
+            if(quantity <= 0){
+                throw new YourCustomException("La cantidad debe ser positiva");
+            }
             cartProduct.setQuantity(quantity);
             cart.addProduct(cartProduct);
             cartRepository.save(cart);
