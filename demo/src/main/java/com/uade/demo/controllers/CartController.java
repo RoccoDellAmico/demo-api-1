@@ -39,20 +39,20 @@ public class CartController {
         return ResponseEntity.ok(cart);
     }
 
-    @GetMapping("/public/carts/{cartId}")
+    @GetMapping("/user/carts/{cartId}")
     public ResponseEntity<CartDTO> getCartById(@PathVariable Long cartId) throws ItemNotFoundException{
         CartDTO cart = cartService.getCartById(cartId);
         return ResponseEntity.ok(cart);
     }
     
 
-    @PostMapping("/public/carts/{email}")
+    @PostMapping("/user/carts/{email}")
     public ResponseEntity<Object> createCart(@PathVariable String email) throws ItemNotFoundException {
         CartDTO cart = cartService.createCart(email);
         return ResponseEntity.created(URI.create("cart" + cart.getCartId())).body(cart);
     }
     
-    @PutMapping("/public/carts")
+    @PutMapping("/user/carts")
     public ResponseEntity<Object> addProductToCart(@RequestBody AddProductToCartRequest addProductToCartRequest)
         throws ItemNotFoundException {
         CartDTO cart = cartService.addProduct(addProductToCartRequest.getCartId(), 
@@ -61,14 +61,14 @@ public class CartController {
         return ResponseEntity.ok(cart);
     }
 
-    @PutMapping("/public/carts/{cartId}/products/{productId}/addOne")
+    @PutMapping("/user/carts/{cartId}/products/{productId}/addOne")
     public ResponseEntity<Object> addOneProduct(@PathVariable Long cartId, 
         @PathVariable Size size, @PathVariable Long productId) throws ItemNotFoundException {
         CartDTO cart = cartService.addOneProduct(cartId, size, productId);
         return ResponseEntity.ok(cart);
     }
 
-    @PutMapping("/public/carts/{cartId}/products/{productId}/{size}/substractOne")
+    @PutMapping("/user/carts/{cartId}/products/{productId}/{size}/substractOne")
     public ResponseEntity<Object> substractOneProduct(@PathVariable Long cartId, @PathVariable Long productId,
         @PathVariable Size size) 
         throws ItemNotFoundException {
@@ -76,14 +76,14 @@ public class CartController {
         return ResponseEntity.ok(cart);
     }
 
-    @PutMapping("/public/carts/{cartId}/products/{productId}/quantity/{newQuantity}/update")
+    @PutMapping("/user/carts/{cartId}/products/{productId}/quantity/{newQuantity}/update")
     public ResponseEntity<Object> updateProductQuantity(@PathVariable Long cartId, @PathVariable Size size,
         @PathVariable Long productId, @PathVariable int newQuantity) throws ItemNotFoundException {
         CartDTO cart = cartService.updateProductQuantity(cartId, size, productId, newQuantity);
         return ResponseEntity.ok(cart);
     }
 
-    @PutMapping("/public/carts/{cartId}/products/{productId}/{size}/remove")
+    @PutMapping("/user/carts/{cartId}/products/{productId}/{size}/remove")
     public ResponseEntity<Object> removeProduct(@PathVariable Long cartId, @PathVariable Long productId, 
         @PathVariable Size size) 
         throws ItemNotFoundException {
@@ -91,25 +91,25 @@ public class CartController {
         return ResponseEntity.ok(cart);
     }
 
-    @PutMapping("/public/carts/{cartId}/clear")
+    @PutMapping("/user/carts/{cartId}/clear")
     public ResponseEntity<Object> clearCart(@PathVariable Long cartId) throws ItemNotFoundException {
         CartDTO cart = cartService.clearCart(cartId);
         return ResponseEntity.ok(cart);
     }
 
-    @GetMapping("/public/carts/{cartId}/getTotal")
+    @GetMapping("/user/carts/{cartId}/getTotal")
     public double getTotal(@PathVariable Long cartId) throws ItemNotFoundException{
         double total = cartService.getTotal(cartId);
         return total;
     }
 
-    @GetMapping("/public/carts/{cartId}/itemCount")
+    @GetMapping("/user/carts/{cartId}/itemCount")
     public int getItemCount(@PathVariable Long cartId) throws ItemNotFoundException{
         int itemCount = cartService.getItemCount(cartId);
         return itemCount;
     }
 
-    @GetMapping("/public/carts/{cartId}/cartProducts")
+    @GetMapping("/user/carts/{cartId}/cartProducts")
     public ResponseEntity<List<CartProductDTO>> getCartProducts(@PathVariable Long cartId) throws ItemNotFoundException{
         List<CartProductDTO> cartProducts = cartService.getCartProducts(cartId);
         return ResponseEntity.ok(cartProducts);

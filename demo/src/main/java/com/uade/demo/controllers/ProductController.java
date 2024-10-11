@@ -55,23 +55,23 @@ public class ProductController {
         return ResponseEntity.ok(productService.getProductByCategoryId(categoryId));
     }
 
-    @GetMapping("public/products/price/{minPrice}/{maxPrice}")
+    @GetMapping("/public/products/price/{minPrice}/{maxPrice}")
     public ResponseEntity<List<ProductDTO>> getProductsByPriceRange(@PathVariable double minPrice, 
         @PathVariable double maxPrice) {
         return ResponseEntity.ok(productService.getProductsByPriceRange(minPrice, maxPrice));
     }
 
-    @GetMapping("public/products/league/{league}")
+    @GetMapping("/public/products/league/{league}")
     public ResponseEntity<List<ProductDTO>> getProductsByLeague(@PathVariable String league) {
         return ResponseEntity.ok(productService.getProductsByLeague(league));
     }
     
-    @GetMapping("public/products/club/{club}")
+    @GetMapping("/public/products/club/{club}")
     public ResponseEntity<List<ProductDTO>> getProductsByClub(@PathVariable String club) {
         return ResponseEntity.ok(productService.getProductsByClub(club));
     }
 
-    @GetMapping("public/products/size/{size}")
+    @GetMapping("/public/products/size/{size}")
     public ResponseEntity<List<ProductDTO>> getProductsBySize(@PathVariable Size size) {
         return ResponseEntity.ok(productService.getProductBySize(size));
     }

@@ -40,7 +40,7 @@ public class UserController {
         return ResponseEntity.ok(result);
     }
 
-    @PutMapping("/public/users/{userId}/password/update")
+    @PutMapping("/user/users/{userId}/password/update")
     public ResponseEntity<UserDTO> updatePassword(@PathVariable Long userId,@RequestBody Map<String, String> request) 
         throws ItemNotFoundException{
         String newPassword = request.get("newPassword");

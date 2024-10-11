@@ -18,7 +18,7 @@ public class PaymentController {
     private PaymentService paymentService;
 
 
-    @PostMapping("/public/payments/{orderId}/paymentMethod/{paymentMethod}")
+    @PostMapping("/user/payments/{orderId}/paymentMethod/{paymentMethod}")
     public Payment createPayment(@PathVariable Long orderId, @PathVariable String paymentMethod) 
         throws ItemNotFoundException {
         Payment payment = paymentService.createPayment(orderId, paymentMethod);
@@ -30,7 +30,7 @@ public class PaymentController {
         return paymentService.getPayments();
     }
 
-    @GetMapping("/public/payments/{userId}")
+    @GetMapping("/user/payments/{userId}")
     public List<Payment> getPaymentsByUser(@PathVariable Long userId) {
         return paymentService.getPaymentsByUser(userId);
     }
