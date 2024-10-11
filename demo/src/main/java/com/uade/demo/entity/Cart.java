@@ -96,9 +96,9 @@ public class Cart {
         return itemCount;
     }
 
-    public boolean hasProduct(Long productId){
+    public boolean hasProduct(Long productId, Size size){
         for(CartProduct cartProduct : cartProducts){
-            if(cartProduct.getProduct().getId() == productId)
+            if(cartProduct.getProduct().getId() == productId && cartProduct.getSize() == size)
                 return true;
         }
         return false;
@@ -112,9 +112,9 @@ public class Cart {
         return null;
     }
 
-    public void updateProductQuantity(Long productId, int newQuantity){
+    public void updateProductQuantity(Long productId, Size size, int newQuantity){
         for(CartProduct cartProduct : cartProducts){
-            if(cartProduct.getProduct().getId() == productId)
+            if(cartProduct.getProduct().getId() == productId && cartProduct.getSize() == size)
                 cartProduct.setQuantity(newQuantity);
         }
     }

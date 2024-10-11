@@ -3,9 +3,10 @@ package com.uade.demo.service;
 import java.util.List;
 import java.util.Map;
 
+import com.uade.demo.entity.ClientCategory;
 import com.uade.demo.entity.Size;
+import com.uade.demo.entity.TypeOfProduct;
 import com.uade.demo.entity.dto.ProductDTO;
-import com.uade.demo.exceptions.CategoryDuplicateException;
 
 public interface ProductService {
     public List<ProductDTO> getProducts();
@@ -22,13 +23,7 @@ public interface ProductService {
 
     public List<ProductDTO> getProductsByClub(String club);
 
-    public List<ProductDTO> getProductByCategoryDescr(String description); 
-
     public List<ProductDTO> getProductBySize(Size size);
-
-    public ProductDTO addProductCategory(Long id, String description) throws CategoryDuplicateException;
-
-    public ProductDTO deleteProductCategory(Long id, String description);
 
     public ProductDTO updateProductPrice(Long id, double price);
 
@@ -37,7 +32,8 @@ public interface ProductService {
     //public void saveProduct(Product newProduct);
 
     public ProductDTO createProduct(String description, double price, Map<Size, Integer> productStock,
-    String club, String league, List<String> photos);
+    String club, String league, List<String> photos, ClientCategory clientCategory, TypeOfProduct typeOfProduct, 
+    int year);
 
     public String deleteProduct(Long productId);
 

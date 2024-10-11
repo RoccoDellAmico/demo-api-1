@@ -17,6 +17,7 @@ import com.uade.demo.entity.dto.OrderProductDTO;
 import com.uade.demo.exceptions.ItemNotFoundException;
 import com.uade.demo.repository.CartRepository;
 import com.uade.demo.repository.OrderRepository;
+import com.uade.demo.repository.ProductRepository;
 
 @Transactional
 @Service
@@ -26,6 +27,8 @@ public class OrderServiceImpl implements OrderService{
     private OrderRepository orderRepository;
     @Autowired
     private CartRepository cartRepository;
+    @Autowired
+    private ProductRepository productRepository;
 
     public OrderDTO mapToOrderDTO(Order order){
         OrderDTO orderDTO = new OrderDTO();
@@ -44,6 +47,7 @@ public class OrderServiceImpl implements OrderService{
             orderProductDTO.setOrderId(orderProduct.getOrder().getId());
             orderProductDTO.setProduct(orderProduct.getProduct());
             orderProductDTO.setQuantity(orderProduct.getQuantity());
+            orderProductDTO.setSize(orderProduct.getSize());
             orderProductDTOs.add(orderProductDTO);
         }
         return orderProductDTOs;
@@ -73,6 +77,7 @@ public class OrderServiceImpl implements OrderService{
             order.addOrderProduct(orderProduct);
             orderProduct.getProduct().updateProductStock(orderProduct.getSize(), 
                 orderProduct.getProduct().getStockBySize(orderProduct.getSize())-orderProduct.getQuantity());
+            productRepository.save(orderProduct.getProduct());
         }
         Order savedOrder = orderRepository.save(order);
         cart.changeState();
@@ -94,6 +99,7 @@ public class OrderServiceImpl implements OrderService{
             orderProduct.setOrder(order);
             orderProduct.setProduct(cartProduct.getProduct());
             orderProduct.setQuantity(cartProduct.getQuantity());
+            orderProduct.setSize(cartProduct.getSize());
             orderProducts.add(orderProduct);
         }
         return orderProducts;

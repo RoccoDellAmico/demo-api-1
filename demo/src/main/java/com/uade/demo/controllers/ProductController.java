@@ -1,7 +1,5 @@
 package com.uade.demo.controllers;
 
-import java.util.Optional;
-import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,22 +8,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.uade.demo.service.ProductService;
 
-import io.micrometer.core.ipc.http.HttpSender.Response;
-
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 
-import com.uade.demo.entity.Product;
 import com.uade.demo.entity.Size;
 import com.uade.demo.entity.dto.AddSizeRequest;
 import com.uade.demo.entity.dto.ProductDTO;
 import com.uade.demo.entity.dto.ProductRequest;
-import com.uade.demo.exceptions.CategoryDuplicateException;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -80,25 +71,9 @@ public class ProductController {
         return ResponseEntity.ok(productService.getProductsByClub(club));
     }
 
-    @GetMapping("/public/categories/{description}/products/description")
-    public ResponseEntity<List<ProductDTO>> getProduductByCategoryDescr(@PathVariable String description) {
-        return ResponseEntity.ok(productService.getProductByCategoryDescr(description));
-    }
-
     @GetMapping("public/products/size/{size}")
     public ResponseEntity<List<ProductDTO>> getProductsBySize(@PathVariable Size size) {
         return ResponseEntity.ok(productService.getProductBySize(size));
-    }
-
-    @PutMapping("admin/products/{productId}/category/update/add")
-    public ResponseEntity<ProductDTO> addProductCategory(@PathVariable Long productId, @RequestBody String categoryDescription) 
-        throws CategoryDuplicateException{
-        return ResponseEntity.ok(productService.addProductCategory(productId, categoryDescription));
-    }
-
-    @PutMapping("admin/products/{productId}/category/update/delete")
-    public ResponseEntity<ProductDTO> deleteProductCategory(@PathVariable Long productId, @RequestBody String categoryDescription)   {
-        return ResponseEntity.ok(productService.deleteProductCategory(productId, categoryDescription));
     }
 
     @PutMapping("/admin/products/{productId}/price/{newPrice}/update")
@@ -116,7 +91,8 @@ public class ProductController {
     public ResponseEntity<ProductDTO> createProduct(@RequestBody ProductRequest productRequest) {
         ProductDTO product = productService.createProduct(productRequest.getDescription(), productRequest.getPrice(), 
             productRequest.getProductStock(), productRequest.getClub(), productRequest.getLeague(), 
-            productRequest.getPhotos());
+            productRequest.getPhotos(), productRequest.getClientCategory(), productRequest.getTypeOfProduct(), 
+            productRequest.getYear());
         return ResponseEntity.ok(product);
     }
     

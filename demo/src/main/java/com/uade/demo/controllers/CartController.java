@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.uade.demo.entity.Size;
+import com.uade.demo.entity.dto.AddProductToCartRequest;
 import com.uade.demo.entity.dto.CartDTO;
 import com.uade.demo.entity.dto.CartProductDTO;
 import com.uade.demo.exceptions.ItemNotFoundException;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
@@ -50,23 +52,27 @@ public class CartController {
         return ResponseEntity.created(URI.create("cart" + cart.getCartId())).body(cart);
     }
     
-    @PutMapping("/public/carts/{cartId}/products/{productId}/quantity/{quantity}")
-    public ResponseEntity<Object> addProductToCart(@PathVariable Long cartId, @PathVariable Size size, 
-        @PathVariable Long productId, @PathVariable int quantity) throws ItemNotFoundException {
-        CartDTO cart = cartService.addProduct(cartId, productId, size, quantity);
+    @PutMapping("/public/carts")
+    public ResponseEntity<Object> addProductToCart(@RequestBody AddProductToCartRequest addProductToCartRequest)
+        throws ItemNotFoundException {
+        CartDTO cart = cartService.addProduct(addProductToCartRequest.getCartId(), 
+        addProductToCartRequest.getProductId(), addProductToCartRequest.getSize(), 
+        addProductToCartRequest.getQuantity());
         return ResponseEntity.ok(cart);
     }
 
     @PutMapping("/public/carts/{cartId}/products/{productId}/addOne")
-    public ResponseEntity<Object> addOneProduct(@PathVariable Long cartId, @PathVariable Size size, @PathVariable Long productId) throws ItemNotFoundException {
-        CartDTO cart = cartService.addOneProduct(cartId, size,productId);
+    public ResponseEntity<Object> addOneProduct(@PathVariable Long cartId, 
+        @PathVariable Size size, @PathVariable Long productId) throws ItemNotFoundException {
+        CartDTO cart = cartService.addOneProduct(cartId, size, productId);
         return ResponseEntity.ok(cart);
     }
 
-    @PutMapping("/public/carts/{cartId}/products/{productId}/substractOne")
-    public ResponseEntity<Object> substractOneProduct(@PathVariable Long cartId, @PathVariable Long productId) 
+    @PutMapping("/public/carts/{cartId}/products/{productId}/{size}/substractOne")
+    public ResponseEntity<Object> substractOneProduct(@PathVariable Long cartId, @PathVariable Long productId,
+        @PathVariable Size size) 
         throws ItemNotFoundException {
-        CartDTO cart = cartService.substractOneProduct(cartId, productId);
+        CartDTO cart = cartService.substractOneProduct(cartId, productId, size);
         return ResponseEntity.ok(cart);
     }
 
@@ -77,10 +83,11 @@ public class CartController {
         return ResponseEntity.ok(cart);
     }
 
-    @PutMapping("/public/carts/{cartId}/products/{productId}/remove")
-    public ResponseEntity<Object> removeProduct(@PathVariable Long cartId, @PathVariable Long productId) 
+    @PutMapping("/public/carts/{cartId}/products/{productId}/{size}/remove")
+    public ResponseEntity<Object> removeProduct(@PathVariable Long cartId, @PathVariable Long productId, 
+        @PathVariable Size size) 
         throws ItemNotFoundException {
-        CartDTO cart = cartService.removeProduct(cartId, productId);
+        CartDTO cart = cartService.removeProduct(cartId, productId, size);
         return ResponseEntity.ok(cart);
     }
 

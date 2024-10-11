@@ -13,10 +13,8 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.MapKeyColumn;
+import jakarta.persistence.MapKeyEnumerated;
 import lombok.Data;
 
 @Data
@@ -30,14 +28,10 @@ public class Product {
 
     private double price;
 
-    /*@Enumerated(EnumType.STRING)
-    private Size size;
-
-    private int stock;*/
-
     @ElementCollection
     @CollectionTable(name = "product_stock")
     @MapKeyColumn(name = "size")
+    @MapKeyEnumerated(EnumType.STRING)
     @Column(name = "stock")
     private Map<Size, Integer> productStock = new HashMap<>();
 
@@ -48,30 +42,26 @@ public class Product {
     @ElementCollection
     private List<String> photos;
 
-    @ManyToMany
-    @JoinTable(
-        name = "product_category",
-        joinColumns = @JoinColumn(name = "product_id"),
-        inverseJoinColumns = @JoinColumn(name = "category_id")
-    )   
-    private List<Category> categories;
+    @Enumerated(EnumType.STRING)
+    private ClientCategory clientCategory;
+
+    @Enumerated(EnumType.STRING)
+    private TypeOfProduct typeOfProduct;
+
+    private int year;
 
     public Product(String description, double price, Map<Size, Integer> productStock,
-        String club, String league, List<String> photos) {
+        String club, String league, List<String> photos, ClientCategory clientCategory, TypeOfProduct typeOfProduct, 
+        int year) {
         this.description = description;
         this.price = price;
         this.productStock = productStock;
         this.club = club;
         this.league = league;
         this.photos = photos;
-    }
-
-    public void addProductCategory(Category category) {
-        categories.add(category);
-    }
-
-    public void removeProductCategory(Category category) {
-        categories.remove(category);
+        this.clientCategory = clientCategory;
+        this.typeOfProduct = typeOfProduct;
+        this.year = year;
     }
 
     public void updateProductStock(Size size, int stock){
@@ -81,11 +71,7 @@ public class Product {
     }
 
     public int getStockBySize(Size size){
-        if(productStock.containsKey(size))
-            return productStock.get(size);
-        else{
-            return -1;
-        }
+        return productStock.getOrDefault(size, 0);
     }
 
     public void addProductSize(Size size, int stock){

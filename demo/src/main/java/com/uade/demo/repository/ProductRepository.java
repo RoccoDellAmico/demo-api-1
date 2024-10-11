@@ -6,6 +6,8 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+
+import com.uade.demo.entity.ClientCategory;
 import com.uade.demo.entity.Product;
 import com.uade.demo.entity.Size;
 
@@ -35,4 +37,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>{
 
     @Query(value = "select p.* from Product p inner join product_stock ps on p.id = ps.product_id group by p.id having sum(ps.stock)>0", nativeQuery = true)
     List<Product> findAvailableProducts(); 
+
+    /*@Query(value = "select p.* from Product p inner join product_stock ps on p.id = ps.product_id where p.clientcategory = ?1 group by p.id having sum(ps.stock)>0", nativeQuery = true)
+    List<Product> findByClientCategory(ClientCategory clientCategory);*/
 }
