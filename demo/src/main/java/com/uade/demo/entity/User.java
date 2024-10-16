@@ -4,6 +4,9 @@ import java.util.Collection;
 import java.util.List;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import com.uade.demo.token.Token;
+
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import jakarta.persistence.CascadeType;
@@ -38,6 +41,9 @@ public class User implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @OneToMany(mappedBy = "user")
+    private List<Token> tokens;
 
     public User() {}
 
