@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import com.uade.demo.entity.Product;
 import com.uade.demo.entity.Size;
 import com.uade.demo.entity.dto.AddSizeRequest;
 import com.uade.demo.entity.dto.ProductDTO;
@@ -31,7 +32,7 @@ public class ProductController {
 
 
     @GetMapping("/admin/products/get")
-    public ResponseEntity<List<ProductDTO>> getProducts() {
+    public ResponseEntity<List<Product>> getProducts() {
         return ResponseEntity.ok(productService.getProducts());
     }
     
@@ -81,7 +82,7 @@ public class ProductController {
         return ResponseEntity.ok(productService.updateProductPrice(productId, newPrice));
     }
 
-    @PutMapping("/admin/products/{productId}/stock/{newStock}/update")
+    @PutMapping("/admin/products/{productId}/{size}/stock/{newStock}/update")
     public ResponseEntity<ProductDTO> updateProductStock(@PathVariable Long productId, @PathVariable Size size, 
         @PathVariable int newStock) {
         return ResponseEntity.ok(productService.updateProductStock(productId, size, newStock));

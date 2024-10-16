@@ -23,9 +23,9 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private ProductRepository productRepository;
 
-    public List<ProductDTO> getProducts(){
+    public List<Product> getProducts(){
         List<Product> products = productRepository.findAll();
-        return mapToListProductDTOs(products);
+        return products;
     }
 
     public List<ProductDTO> getProductsUser(){

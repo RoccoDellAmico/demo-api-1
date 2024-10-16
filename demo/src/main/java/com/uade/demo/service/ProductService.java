@@ -4,12 +4,13 @@ import java.util.List;
 import java.util.Map;
 
 import com.uade.demo.entity.ClientCategory;
+import com.uade.demo.entity.Product;
 import com.uade.demo.entity.Size;
 import com.uade.demo.entity.TypeOfProduct;
 import com.uade.demo.entity.dto.ProductDTO;
 
 public interface ProductService {
-    public List<ProductDTO> getProducts();
+    public List<Product> getProducts();
 
     public ProductDTO getProductById(Long productId);
 
