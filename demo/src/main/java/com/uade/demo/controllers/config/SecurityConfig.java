@@ -33,7 +33,7 @@ public class SecurityConfig {
 
         @Bean
         public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-                /*List<String> allowedOrigins = new ArrayList<>();
+                List<String> allowedOrigins = new ArrayList<>();
                 allowedOrigins.add("http://localhost:5173");
 
                 List<String> allowedMethods = new ArrayList<>();
@@ -49,10 +49,10 @@ public class SecurityConfig {
                 allowedHeaders.add("Origin");
 
                 List<String> exposedHeaders = new ArrayList<>();
-                exposedHeaders.add("Authorization");*/
+                exposedHeaders.add("Authorization");
 
                 http
-                                /*.cors().configurationSource(request -> {
+                                .cors().configurationSource(request -> {
                                         CorsConfiguration configuration = new CorsConfiguration();
                                         configuration.setAllowedOrigins(allowedOrigins); 
                         
@@ -62,7 +62,7 @@ public class SecurityConfig {
                                         configuration.setExposedHeaders(exposedHeaders); // Exponer encabezados personalizados si es necesario
                                         return configuration;
                                 })
-                                .and()*/
+                                .and()
                                 .csrf(AbstractHttpConfigurer::disable)
                                 .authorizeHttpRequests()
                                 .requestMatchers(AppConstants.PUBLIC_URLS).permitAll()
