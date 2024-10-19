@@ -61,7 +61,7 @@ public class CartController {
         return ResponseEntity.ok(cart);
     }
 
-    @PutMapping("/user/carts/{cartId}/products/{productId}/addOne")
+    @PutMapping("/user/carts/{cartId}/products/{productId}/{size}/addOne")
     public ResponseEntity<Object> addOneProduct(@PathVariable Long cartId, 
         @PathVariable Size size, @PathVariable Long productId) throws ItemNotFoundException {
         CartDTO cart = cartService.addOneProduct(cartId, size, productId);
