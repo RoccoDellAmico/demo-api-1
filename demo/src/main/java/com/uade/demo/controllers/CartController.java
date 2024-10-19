@@ -113,4 +113,11 @@ public class CartController {
         List<CartProductDTO> cartProducts = cartService.getCartProducts(cartId);
         return ResponseEntity.ok(cartProducts);
     }
+
+    @PutMapping("/user/carts/add-discount/{discountCode}/cart/{cartId}")
+    public ResponseEntity<CartDTO> addDiscountCode(@PathVariable String discountCode, @PathVariable Long cartId) 
+        throws ItemNotFoundException {
+        CartDTO cartDTO = cartService.addDiscountCode(discountCode, cartId); 
+        return ResponseEntity.ok(cartDTO);
+    }
 }

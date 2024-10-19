@@ -34,6 +34,8 @@ public class Cart {
     @Column(name = "active", columnDefinition = "TINYINT(1)")
     private boolean active = true;
 
+    private String discountCode;
+
     public Cart(User user){
         this.user = user;
     }

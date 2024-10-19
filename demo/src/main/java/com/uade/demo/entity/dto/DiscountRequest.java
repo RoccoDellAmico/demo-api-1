@@ -12,6 +12,4 @@ public class DiscountRequest {
     private double fixedAmount;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
-    private boolean appliesToCart;
-    private String paymentMethod;
 }

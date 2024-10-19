@@ -29,6 +29,8 @@ public class OrderServiceImpl implements OrderService{
     private CartRepository cartRepository;
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private CartService cartService;
 
     public OrderDTO mapToOrderDTO(Order order){
         OrderDTO orderDTO = new OrderDTO();
@@ -80,15 +82,16 @@ public class OrderServiceImpl implements OrderService{
             productRepository.save(orderProduct.getProduct());
         }
         Order savedOrder = orderRepository.save(order);
+        cart.setDiscountCode(null);
         cart.changeState();
         cartRepository.save(cart);
         return mapToOrderDTO(savedOrder);
     }
 
-    public Order createOrder(Cart cart){
+    public Order createOrder(Cart cart) throws ItemNotFoundException{
         Order order = new Order();
         order.setUser(cart.getUser());
-        order.setTotal(cart.getTotal());
+        order.setTotal(cartService.getTotal(cart.getCartId()));
         return order;
     }
 

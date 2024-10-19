@@ -10,4 +10,5 @@ public class CartDTO {
     private List<CartProductDTO> cartProducts;
     private String userEmail;
     private boolean active;
+    private String discountCode;
 }

@@ -21,4 +21,5 @@ public interface CartService {
     CartDTO getCartsByUser(Long userId);
     CartDTO createCart(String email) throws ItemNotFoundException; 
     CartDTO getCartById(Long cartId) throws ItemNotFoundException;
+    CartDTO addDiscountCode(String discountCode, Long cartId) throws ItemNotFoundException;
 }

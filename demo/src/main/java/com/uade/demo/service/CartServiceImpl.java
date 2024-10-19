@@ -19,6 +19,7 @@ import com.uade.demo.repository.UserRepository;
 import com.uade.demo.controllers.YourCustomException;
 import com.uade.demo.entity.Cart;
 import com.uade.demo.entity.CartProduct;
+import com.uade.demo.entity.Discount;
 
 @Service
 @Transactional
@@ -30,6 +31,8 @@ public class CartServiceImpl implements CartService {
     private CartRepository cartRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private DiscountService discountService;
 
     public CartDTO mapToCartDTO(Cart cart){
         CartDTO cartDTO = new CartDTO();
@@ -37,6 +40,7 @@ public class CartServiceImpl implements CartService {
         cartDTO.setCartProducts(mapToCartProductDTO(cart.getCartProducts()));
         cartDTO.setUserEmail(cart.getUser().getEmail());
         cartDTO.setActive(cart.isActive()); 
+        cartDTO.setDiscountCode(cart.getDiscountCode());
         return cartDTO;
     }
 
@@ -145,6 +149,7 @@ public class CartServiceImpl implements CartService {
     public CartDTO clearCart(Long cartId) throws ItemNotFoundException {
         Cart cart = cartRepository.findByCartId(cartId).orElseThrow(() -> new ItemNotFoundException());
         cart.clearCart();
+        cart.setDiscountCode(null);
         cartRepository.save(cart);
         return mapToCartDTO(cart);
     }
@@ -158,6 +163,15 @@ public class CartServiceImpl implements CartService {
     @Override
     public double getTotal(Long cartId) throws ItemNotFoundException {
         Cart cart = cartRepository.findByCartId(cartId).orElseThrow(() -> new ItemNotFoundException());
+        if(cart.getDiscountCode() != null){
+            Discount discount = discountService.getDiscount(cart.getDiscountCode());
+            if(discount.getFixedAmount() == 0){
+                return cart.getTotal() * discount.getPercentage();
+            }
+            else{
+                return cart.getTotal() - discount.getFixedAmount();
+            }
+        }
         return cart.getTotal();
     }
 
@@ -202,6 +216,20 @@ public class CartServiceImpl implements CartService {
     public CartDTO getCartById(Long cartId) throws ItemNotFoundException{
         Cart cart = cartRepository.findByCartId(cartId).orElseThrow(() -> new ItemNotFoundException());
         return mapToCartDTO(cart);
+    }
+
+    @Override
+    public CartDTO addDiscountCode(String discountCode, Long cartId) throws ItemNotFoundException{
+        Cart cart = cartRepository.findByCartId(cartId).orElseThrow(() -> new ItemNotFoundException());
+        boolean isDiscountCodeValid = discountService.validatePromoCode(discountCode);
+        if(isDiscountCodeValid){
+            cart.setDiscountCode(discountCode);
+            cartRepository.save(cart);
+            return mapToCartDTO(cart);
+        } 
+        else {
+            return mapToCartDTO(cart);
+        }  
     }
 }
 
