@@ -38,9 +38,10 @@ public class CartController {
         return ResponseEntity.ok(cart);
     }
 
-    @GetMapping("/user/carts/{cartId}")
-    public ResponseEntity<CartDTO> getCartById(@PathVariable Long cartId) throws ItemNotFoundException{
-        CartDTO cart = cartService.getCartById(cartId);
+    @GetMapping("/user/carts/{userId}")
+    public ResponseEntity<CartDTO> getCartById(@PathVariable Long userId) throws ItemNotFoundException{
+        //CartDTO cart = cartService.getCartById(cartId);
+        CartDTO cart = cartService.getCartsByUser(userId);
         return ResponseEntity.ok(cart);
     }
     
