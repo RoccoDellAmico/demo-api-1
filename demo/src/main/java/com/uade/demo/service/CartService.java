@@ -19,7 +19,7 @@ public interface CartService {
     int getItemCount(Long cartId) throws ItemNotFoundException;
     List<CartDTO> getCarts();
     CartDTO getCartsByUser(Long userId);
-    CartDTO createCart(String email) throws ItemNotFoundException; 
+    CartDTO createCart(Long userId) throws ItemNotFoundException; 
     CartDTO getCartById(Long cartId) throws ItemNotFoundException;
     CartDTO addDiscountCode(String discountCode, Long cartId) throws ItemNotFoundException;
 }

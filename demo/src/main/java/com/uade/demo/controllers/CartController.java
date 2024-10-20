@@ -11,6 +11,7 @@ import com.uade.demo.entity.Size;
 import com.uade.demo.entity.dto.AddProductToCartRequest;
 import com.uade.demo.entity.dto.CartDTO;
 import com.uade.demo.entity.dto.CartProductDTO;
+import com.uade.demo.entity.dto.CreateCartRequest;
 import com.uade.demo.exceptions.ItemNotFoundException;
 import com.uade.demo.service.CartService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -46,11 +47,19 @@ public class CartController {
     }
     
 
-    @PostMapping("/user/carts/{email}")
+    /*@PostMapping("/user/carts/{email}")
     public ResponseEntity<Object> createCart(@PathVariable String email) throws ItemNotFoundException {
         CartDTO cart = cartService.createCart(email);
         return ResponseEntity.created(URI.create("cart" + cart.getCartId())).body(cart);
+    }*/
+
+    @PostMapping("/user/carts/create")
+    public ResponseEntity<CartDTO> createCart(@RequestBody CreateCartRequest createCartRequest) 
+        throws ItemNotFoundException {
+        CartDTO createdCart = cartService.createCart(createCartRequest.getUserId());
+        return ResponseEntity.ok(createdCart);
     }
+    
     
     @PutMapping("/user/carts")
     public ResponseEntity<Object> addProductToCart(@RequestBody AddProductToCartRequest addProductToCartRequest)

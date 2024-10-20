@@ -2,6 +2,7 @@ package com.uade.demo.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -198,7 +199,7 @@ public class CartServiceImpl implements CartService {
         return mapToCartDTO(cart);
     }
 
-    @Transactional(rollbackFor = Throwable.class)
+    /*@Transactional(rollbackFor = Throwable.class)
     @Override
     public CartDTO createCart(String email) throws ItemNotFoundException{
         User user = userRepository.findByEmail(email).orElseThrow(() -> new ItemNotFoundException());
@@ -209,6 +210,22 @@ public class CartServiceImpl implements CartService {
         }
         cart.clearCart();
         cart.changeState();
+        return mapToCartDTO(cart);
+    }*/
+
+    @Transactional(rollbackFor = Throwable.class)
+    @Override
+    public CartDTO createCart(Long userId) throws ItemNotFoundException{
+        Optional<User> userOptional = userRepository.findById(userId);
+        Cart cart = cartRepository.findCartByUser(userId);
+        if(cart == null && userOptional.isPresent()){
+            User user = userOptional.get();
+            Cart newCart = cartRepository.save(new Cart(user));    
+            return mapToCartDTO(newCart);
+        }
+        cart.clearCart();
+        cart.changeState();
+        cart.setDiscountCode(null);
         return mapToCartDTO(cart);
     }
 
