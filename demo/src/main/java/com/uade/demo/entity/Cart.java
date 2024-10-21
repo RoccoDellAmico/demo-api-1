@@ -118,7 +118,7 @@ public class Cart {
 
     public boolean hasCartProduct(Long cartProductId){
         for(CartProduct cartProduct : cartProducts){
-            if(cartProduct.getProduct().getId() == cartProductId)
+            if(cartProduct.getCartProductId() == cartProductId)
                 return true;
         }
         return false;

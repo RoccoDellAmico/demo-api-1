@@ -18,6 +18,7 @@ import com.uade.demo.exceptions.ItemNotFoundException;
 import com.uade.demo.service.CartService;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -96,22 +97,22 @@ public ResponseEntity<Object> createCart(@RequestBody CreateCartRequest createCa
         return ResponseEntity.ok(cart);
     }
 
-    @PutMapping("/user/carts/{cartId}/products/{productId}/size/{size}/quantity/{newQuantity}/update")
-    public ResponseEntity<Object> updateProductQuantity(@PathVariable Long cartId, @PathVariable Size size,
-        @PathVariable Long productId, @PathVariable int newQuantity) throws ItemNotFoundException {
-        CartDTO cart = cartService.updateProductQuantity(cartId, size, productId, newQuantity);
+    @PutMapping("/user/carts/{cartId}/products/{cartProdutId}/quantity/{newQuantity}/update")
+    public ResponseEntity<Object> updateProductQuantity(@PathVariable Long cartId,
+        @PathVariable Long cartProdutId, @PathVariable int newQuantity) throws ItemNotFoundException {
+        CartDTO cart = cartService.updateProductQuantity(cartId, cartProdutId, newQuantity);
         return ResponseEntity.ok(cart);
     }
 
-    @PutMapping("/user/carts/{cartId}/products/{cartProductId}/remove")
-    public ResponseEntity<Object> removeProduct(@PathVariable Long cartId, @PathVariable Long cartProductId) 
+    @DeleteMapping("/user/carts/{cartId}/products/{cartProductId}/remove")
+    public ResponseEntity<CartDTO> removeProduct(@PathVariable Long cartId, @PathVariable Long cartProductId) 
         throws ItemNotFoundException {
         CartDTO cart = cartService.removeProduct(cartId, cartProductId );
         return ResponseEntity.ok(cart);
     }
 
-    @PutMapping("/user/carts/{cartId}/clear")
-    public ResponseEntity<Object> clearCart(@PathVariable Long cartId) throws ItemNotFoundException {
+    @DeleteMapping("/user/carts/{cartId}/clear")
+    public ResponseEntity<CartDTO> clearCart(@PathVariable Long cartId) throws ItemNotFoundException {
         CartDTO cart = cartService.clearCart(cartId);
         return ResponseEntity.ok(cart);
     }

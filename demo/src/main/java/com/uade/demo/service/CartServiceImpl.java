@@ -98,12 +98,11 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public CartDTO updateProductQuantity(Long cartId, Size size, Long productId, int newQuantity) throws ItemNotFoundException {
+    public CartDTO updateProductQuantity(Long cartId,Long cartProdutId, int newQuantity) throws ItemNotFoundException {
         Cart cart = cartRepository.findByCartId(cartId).orElseThrow(() -> new ItemNotFoundException());
-        boolean hasProduct = cart.hasProduct(productId, size);
+        boolean hasProduct = cart.hasCartProduct(cartProdutId);
         if(hasProduct){
-            Product product = productRepository.findById(productId).orElseThrow(
-                () -> new ItemNotFoundException());
+            Product product = cart
             if(newQuantity > product.getStockBySize(size)){
                 throw new YourCustomException(product.getDescription() + " sin stock disponible");
             }
