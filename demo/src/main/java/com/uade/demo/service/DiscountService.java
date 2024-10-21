@@ -10,7 +10,8 @@ public interface DiscountService {
     List<Discount> getDiscounts();
     Discount createDiscount(String code, String description, double percentage, double fixedAmount, 
         LocalDateTime startDate, LocalDateTime endDate);
-    Discount updateDiscount(String code, String description, double percentage, double fixedAmount, 
+    Discount updateDiscount(Long id, String code, String description, double percentage, double fixedAmount, 
         LocalDateTime startDate, LocalDateTime endDate);
     Discount getDiscount(String code);
+    void deleteDiscount(Long discountId);
 }
