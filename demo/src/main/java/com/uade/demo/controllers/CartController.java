@@ -104,7 +104,7 @@ public ResponseEntity<Object> createCart(@RequestBody CreateCartRequest createCa
     }
 
     @PutMapping("/user/carts/{cartId}/products/{cartProductId}/remove")
-    public ResponseEntity<Object> removeProduct(@PathVariable Long cartId, @PathVariable Long cartProductId,) 
+    public ResponseEntity<Object> removeProduct(@PathVariable Long cartId, @PathVariable Long cartProductId) 
         throws ItemNotFoundException {
         CartDTO cart = cartService.removeProduct(cartId, cartProductId );
         return ResponseEntity.ok(cart);

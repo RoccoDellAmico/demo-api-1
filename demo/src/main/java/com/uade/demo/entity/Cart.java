@@ -74,6 +74,16 @@ public class Cart {
         cartProducts.remove(index);
     }
 
+    public void removeCartProduct(Long cartProductId){
+        int index = -1;
+        for(CartProduct cartProduct : cartProducts){
+            if(cartProduct.getCartProductId() == cartProductId){
+                index = cartProducts.indexOf(cartProduct);
+            }
+        }
+        cartProducts.remove(index);
+    }
+
     public void clearCart(){
         cartProducts.clear();
     }
@@ -101,6 +111,14 @@ public class Cart {
     public boolean hasProduct(Long productId, Size size){
         for(CartProduct cartProduct : cartProducts){
             if(cartProduct.getProduct().getId() == productId && cartProduct.getSize() == size)
+                return true;
+        }
+        return false;
+    }
+
+    public boolean hasCartProduct(Long cartProductId){
+        for(CartProduct cartProduct : cartProducts){
+            if(cartProduct.getProduct().getId() == cartProductId)
                 return true;
         }
         return false;
