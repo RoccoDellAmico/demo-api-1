@@ -3,6 +3,7 @@ package com.uade.demo.controllers;
 import java.net.URI;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,6 +13,7 @@ import com.uade.demo.entity.dto.AddProductToCartRequest;
 import com.uade.demo.entity.dto.CartDTO;
 import com.uade.demo.entity.dto.CartProductDTO;
 import com.uade.demo.entity.dto.CreateCartRequest;
+import com.uade.demo.exceptions.InvalidItemCountException;
 import com.uade.demo.exceptions.ItemNotFoundException;
 import com.uade.demo.service.CartService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -53,12 +55,19 @@ public class CartController {
         return ResponseEntity.created(URI.create("cart" + cart.getCartId())).body(cart);
     }*/
 
-    @PostMapping("/user/carts/create")
-    public ResponseEntity<CartDTO> createCart(@RequestBody CreateCartRequest createCartRequest) 
-        throws ItemNotFoundException {
-        CartDTO createdCart = cartService.createCart(createCartRequest.getUserId());
+@PostMapping("/user/carts/create")
+public ResponseEntity<Object> createCart(@RequestBody CreateCartRequest createCartRequest) 
+    throws ItemNotFoundException {
+    
+    Long userId = createCartRequest.getUserId();
+    try {
+        // Crear carrito solo si el número de ítems es permitido
+        CartDTO createdCart = cartService.createCart(userId);
         return ResponseEntity.ok(createdCart);
+    } catch (InvalidItemCountException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage());
     }
+}
     
     
     @PutMapping("/user/carts")
