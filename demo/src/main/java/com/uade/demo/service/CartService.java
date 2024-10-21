@@ -9,7 +9,7 @@ import com.uade.demo.exceptions.ItemNotFoundException;
 
 public interface CartService {
     CartDTO addProduct(Long cartId, Long productId, Size size,int quantity) throws ItemNotFoundException;
-    CartDTO removeProduct(Long cartId, Long productId, Size size) throws ItemNotFoundException;
+    CartDTO removeProduct(Long cartId, Long cartProductId) throws ItemNotFoundException;
     CartDTO updateProductQuantity(Long cartId, Size size,Long productId, int newQuantity) throws ItemNotFoundException;
     CartDTO addOneProduct(Long cartId, Size size,Long productId) throws ItemNotFoundException;
     CartDTO substractOneProduct(Long cartId, Long productId, Size size) throws ItemNotFoundException;

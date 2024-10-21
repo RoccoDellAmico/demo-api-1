@@ -73,7 +73,7 @@ public ResponseEntity<Object> createCart(@RequestBody CreateCartRequest createCa
     
     
     @PutMapping("/user/carts")
-    public ResponseEntity<Object> addProductToCart(@RequestBody AddProductToCartRequest addProductToCartRequest)
+    public ResponseEntity<CartDTO> addProductToCart(@RequestBody AddProductToCartRequest addProductToCartRequest)
         throws ItemNotFoundException {
         CartDTO cart = cartService.addProduct(addProductToCartRequest.getCartId(), 
         addProductToCartRequest.getProductId(), addProductToCartRequest.getSize(), 
@@ -103,11 +103,10 @@ public ResponseEntity<Object> createCart(@RequestBody CreateCartRequest createCa
         return ResponseEntity.ok(cart);
     }
 
-    @PutMapping("/user/carts/{cartId}/products/{productId}/{size}/remove")
-    public ResponseEntity<Object> removeProduct(@PathVariable Long cartId, @PathVariable Long productId, 
-        @PathVariable Size size) 
+    @PutMapping("/user/carts/{cartId}/products/{cartProductId}/remove")
+    public ResponseEntity<Object> removeProduct(@PathVariable Long cartId, @PathVariable Long cartProductId,) 
         throws ItemNotFoundException {
-        CartDTO cart = cartService.removeProduct(cartId, productId, size);
+        CartDTO cart = cartService.removeProduct(cartId, cartProductId );
         return ResponseEntity.ok(cart);
     }
 
@@ -124,9 +123,9 @@ public ResponseEntity<Object> createCart(@RequestBody CreateCartRequest createCa
     }
 
     @GetMapping("/user/carts/{cartId}/itemCount")
-    public int getItemCount(@PathVariable Long cartId) throws ItemNotFoundException{
+    public ResponseEntity<Integer> getItemCount(@PathVariable Long cartId) throws ItemNotFoundException{
         int itemCount = cartService.getItemCount(cartId);
-        return itemCount;
+        return ResponseEntity.ok(itemCount);
     }
 
     @GetMapping("/user/carts/{cartId}/cartProducts")

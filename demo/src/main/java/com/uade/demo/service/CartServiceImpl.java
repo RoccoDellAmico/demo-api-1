@@ -86,7 +86,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public CartDTO removeProduct(Long cartId, Long productId, Size size) throws ItemNotFoundException{
+    public CartDTO removeProduct(Long cartId, Long cartProductId) throws ItemNotFoundException{
         Cart cart = cartRepository.findByCartId(cartId).orElseThrow(() -> new ItemNotFoundException());
         Product product = productRepository.findById(productId).orElseThrow(
             () -> new ItemNotFoundException());
