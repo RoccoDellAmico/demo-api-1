@@ -11,7 +11,10 @@ import com.uade.demo.controllers.YourCustomException;
 import com.uade.demo.entity.Discount;
 import com.uade.demo.repository.DiscountRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
+@Transactional
 public class DiscountServiceImpl implements DiscountService {
     @Autowired
     private DiscountRepository discountRepository;
@@ -43,11 +46,20 @@ public class DiscountServiceImpl implements DiscountService {
             return discount;
     }
 
-    public Discount updateDiscount(String code, String description, double percentage, double fixedAmount, 
+    public Discount updateDiscount(Long id, String code, String description, double percentage, double fixedAmount, 
         LocalDateTime startDate, LocalDateTime endDate){
-            Discount discount = discountRepository.save(new Discount(code, description, percentage, fixedAmount, 
-            startDate, endDate));
-            return discount;
+            Optional<Discount> discountOptional = discountRepository.findById(id);
+            if(discountOptional.isPresent()){
+                Discount discount = discountOptional.get();
+                discount.setCode(code);
+                discount.setDescription(description);
+                discount.setPercentage(percentage);
+                discount.setFixedAmount(fixedAmount);
+                discount.setStartDate(startDate);
+                discount.setEndDate(endDate);
+                return discountRepository.save(discount);
+            }
+        return null;
     }
 
     public Discount getDiscount(String code){
@@ -59,6 +71,14 @@ public class DiscountServiceImpl implements DiscountService {
             }
         }
         return null;
+    }
+
+    public void deleteDiscount(Long discountId){
+        Optional<Discount> discountOptional = discountRepository.findById(discountId);
+        if(discountOptional.isPresent()){
+            Discount discount = discountOptional.get();
+            discountRepository.delete(discount);
+        }
     }
 
     private boolean isDiscountExpired(Discount discount){
