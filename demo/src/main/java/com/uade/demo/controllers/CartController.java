@@ -16,13 +16,15 @@ import com.uade.demo.entity.dto.CreateCartRequest;
 import com.uade.demo.exceptions.InvalidItemCountException;
 import com.uade.demo.exceptions.ItemNotFoundException;
 import com.uade.demo.service.CartService;
+
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api")
 public class CartController {
@@ -116,9 +118,9 @@ public ResponseEntity<Object> createCart(@RequestBody CreateCartRequest createCa
     }
 
     @GetMapping("/user/carts/{cartId}/getTotal")
-    public double getTotal(@PathVariable Long cartId) throws ItemNotFoundException{
+    public ResponseEntity<Double> getTotal(@PathVariable Long cartId) throws ItemNotFoundException{
         double total = cartService.getTotal(cartId);
-        return total;
+        return ResponseEntity.ok(total);
     }
 
     @GetMapping("/user/carts/{cartId}/itemCount")
