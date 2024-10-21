@@ -13,6 +13,7 @@ import com.uade.demo.entity.Size;
 import com.uade.demo.entity.User;
 import com.uade.demo.entity.dto.CartDTO;
 import com.uade.demo.entity.dto.CartProductDTO;
+import com.uade.demo.exceptions.InvalidItemCountException;
 import com.uade.demo.exceptions.ItemNotFoundException;
 import com.uade.demo.repository.CartRepository;
 import com.uade.demo.repository.ProductRepository;
@@ -213,20 +214,28 @@ public class CartServiceImpl implements CartService {
         return mapToCartDTO(cart);
     }*/
 
-    @Transactional(rollbackFor = Throwable.class)
     @Override
-    public CartDTO createCart(Long userId) throws ItemNotFoundException{
+    @Transactional(rollbackFor = Throwable.class)
+    public CartDTO createCart(Long userId) throws ItemNotFoundException, InvalidItemCountException {
         Optional<User> userOptional = userRepository.findById(userId);
         Cart cart = cartRepository.findCartByUser(userId);
-        if(cart == null && userOptional.isPresent()){
+
+        if (!userOptional.isPresent()) {
+            throw new ItemNotFoundException();
+        }
+
+        if (cart == null) {
+            // Si no existe un carrito, creamos uno nuevo
             User user = userOptional.get();
             Cart newCart = cartRepository.save(new Cart(user));    
             return mapToCartDTO(newCart);
+        } else {
+            // Limpiar el carrito existente
+            cart.clearCart();
+            cart.changeState();
+            cart.setDiscountCode(null);
+            return mapToCartDTO(cart);
         }
-        cart.clearCart();
-        cart.changeState();
-        cart.setDiscountCode(null);
-        return mapToCartDTO(cart);
     }
 
     @Override
