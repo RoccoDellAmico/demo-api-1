@@ -132,6 +132,24 @@ public class Cart {
         return null;
     }
 
+    public Product getProductByCartProductId(Long cartProductId){
+        for(CartProduct cartProduct : cartProducts){
+            if(cartProduct.getCartProductId() == cartProductId){
+                return cartProduct.getProduct();
+            }
+        }
+        return null;
+    }
+
+    public CartProduct getCartProductByCartProductId(Long cartProductId){
+        for(CartProduct cartProduct : cartProducts){
+            if(cartProduct.getCartProductId() == cartProductId){
+                return cartProduct;
+            }
+        }
+        return null;
+    }
+
     public void updateProductQuantity(Long productId, Size size, int newQuantity){
         for(CartProduct cartProduct : cartProducts){
             if(cartProduct.getProduct().getId() == productId && cartProduct.getSize() == size)
