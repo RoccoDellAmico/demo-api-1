@@ -66,6 +66,17 @@ public class OrderServiceImpl implements OrderService{
         return orderDTOs;
     }
 
+    @Override
+    public List<OrderDTO> getOrdersById(Long userId) {
+        List<Order> orders = orderRepository.findByUserId(userId);
+        List<OrderDTO> orderDTOs = new ArrayList<>();
+        for(Order order : orders){
+            OrderDTO orderDTO = mapToOrderDTO(order);
+            orderDTOs.add(orderDTO);
+        }
+        return orderDTOs;
+    }
+
     @Transactional(rollbackFor = Throwable.class)
     @Override
     public OrderDTO placeOrder(Long cartId) throws ItemNotFoundException {

@@ -25,9 +25,15 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
-    @GetMapping("/admin/orders")
+    @DeleteMapping("/admin/orders")
     public ResponseEntity<List<OrderDTO>> getOrders(){
         List<OrderDTO> orders = orderService.getOrders();
+        return ResponseEntity.ok(orders);
+    }
+
+    @GetMapping("/user/orders/{userId}")
+    public ResponseEntity<List<OrderDTO>> getOrdersById (@PathVariable Long userId){
+        List<OrderDTO> orders = orderService.getOrdersById(userId);
         return ResponseEntity.ok(orders);
     }
 
