@@ -108,13 +108,21 @@ public class ProductServiceImpl implements ProductService {
         return savedProduct;
     }
 
-    @Transactional(rollbackFor = Throwable.class)
+    /*@Transactional(rollbackFor = Throwable.class)
     public String deleteProduct(Long productId) {
         Product product = productRepository.findById(productId).orElse(null);
 
         productRepository.delete(product);
 
         return "Product with productId: " + productId + " deleted successfully !!!";
+    }*/
+
+    public void deleteProduct(Long productId){
+        Optional<Product> productOptional = productRepository.findByIdAdmin(productId);
+        if(productOptional.isPresent()){
+            Product product = productOptional.get();
+            productRepository.delete(product);
+        }
     }
 
     public ProductDTO addProductSize(Long id, Size size, int stock){
