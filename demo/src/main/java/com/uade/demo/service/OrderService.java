@@ -7,5 +7,6 @@ import com.uade.demo.exceptions.ItemNotFoundException;
 
 public interface OrderService {
     List<OrderDTO> getOrders();
+    List<OrderDTO> getOrdersById(Long userId);
     OrderDTO placeOrder(Long cartId) throws ItemNotFoundException;
 }

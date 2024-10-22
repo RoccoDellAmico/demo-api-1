@@ -44,7 +44,7 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
-    @GetMapping("/admin/users/{userId}")
+    @GetMapping("/users/{userId}")
     public ResponseEntity<UserDTO> getUserById(@PathVariable Long userId) throws ItemNotFoundException{
         UserDTO result = userService.getUserById(userId);
         return ResponseEntity.ok(result);

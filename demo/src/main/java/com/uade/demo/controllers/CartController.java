@@ -135,7 +135,7 @@ public ResponseEntity<Object> createCart(@RequestBody CreateCartRequest createCa
         return ResponseEntity.ok(cartProducts);
     }
 
-    @PutMapping("/user/carts/add-discount/{discountCode}/cart/{cartId}")
+    @DeleteMapping("/user/carts/add-discount/{discountCode}/cart/{cartId}")
     public ResponseEntity<CartDTO> addDiscountCode(@PathVariable String discountCode, @PathVariable Long cartId) 
         throws ItemNotFoundException {
         CartDTO cartDTO = cartService.addDiscountCode(discountCode, cartId); 
