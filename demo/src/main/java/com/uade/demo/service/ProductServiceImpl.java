@@ -99,22 +99,30 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Transactional(rollbackFor = Throwable.class)
-    public ProductDTO createProduct(String description, double price, Map<Size, Integer> productStock,
+    public Product createProduct(String description, double price, Map<Size, Integer> productStock,
     String club, String league, List<String> photos, ClientCategory clientCategory, TypeOfProduct typeOfProduct, 
     int year) {
         Product product = new Product(description, price, productStock, club, league, photos, clientCategory, 
         typeOfProduct, year);
-        productRepository.save(product);
-        return mapToProductDTO(product);
+        Product savedProduct = productRepository.save(product);
+        return savedProduct;
     }
 
-    @Transactional(rollbackFor = Throwable.class)
+    /*@Transactional(rollbackFor = Throwable.class)
     public String deleteProduct(Long productId) {
         Product product = productRepository.findById(productId).orElse(null);
 
         productRepository.delete(product);
 
         return "Product with productId: " + productId + " deleted successfully !!!";
+    }*/
+
+    public void deleteProduct(Long productId){
+        Optional<Product> productOptional = productRepository.findByIdAdmin(productId);
+        if(productOptional.isPresent()){
+            Product product = productOptional.get();
+            productRepository.delete(product);
+        }
     }
 
     public ProductDTO addProductSize(Long id, Size size, int stock){
@@ -143,6 +151,27 @@ public class ProductServiceImpl implements ProductService {
             productDTOs.add(mapToProductDTO(product));
         }
         return productDTOs;
+    }
+
+    @Override
+    public Product updateProduct(Long id, String description, double price, Map<Size, Integer> productStock,
+            String club, String league, List<String> photos, ClientCategory clientCategory, TypeOfProduct typeOfProduct,
+            int year) {
+        Optional<Product> productOptional = productRepository.findById(id);
+        if(productOptional.isPresent()){
+            Product product = productOptional.get();
+            product.setDescription(description);
+            product.setPrice(price);
+            product.setProductStock(productStock);
+            product.setClub(club);
+            product.setLeague(league);
+            product.setPhotos(photos);
+            product.setClientCategory(clientCategory);
+            product.setTypeOfProduct(typeOfProduct);
+            product.setYear(year);
+            return productRepository.save(product);
+        }
+        return null;
     }
 
 }

@@ -93,11 +93,20 @@ public class ProductController {
     }
 
     @PostMapping("/admin/products")
-    public ResponseEntity<ProductDTO> createProduct(@RequestBody ProductRequest productRequest) {
-        ProductDTO product = productService.createProduct(productRequest.getDescription(), productRequest.getPrice(), 
+    public ResponseEntity<Product> createProduct(@RequestBody ProductRequest productRequest) {
+        Product product = productService.createProduct(productRequest.getDescription(), productRequest.getPrice(), 
             productRequest.getProductStock(), productRequest.getClub(), productRequest.getLeague(), 
             productRequest.getPhotos(), productRequest.getClientCategory(), productRequest.getTypeOfProduct(), 
             productRequest.getYear());
+        return ResponseEntity.ok(product);
+    }
+
+    @PutMapping("/admin/products/update")
+    public ResponseEntity<Product> updateProduct(@RequestBody ProductRequest productRequest){
+        Product product = productService.updateProduct(productRequest.getId(), productRequest.getDescription(), 
+            productRequest.getPrice(), productRequest.getProductStock(), productRequest.getClub(), 
+            productRequest.getLeague(), productRequest.getPhotos(), productRequest.getClientCategory(), 
+            productRequest.getTypeOfProduct(), productRequest.getYear());
         return ResponseEntity.ok(product);
     }
     

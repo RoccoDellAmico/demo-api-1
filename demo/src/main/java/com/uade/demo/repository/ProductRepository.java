@@ -18,6 +18,9 @@ public interface ProductRepository extends JpaRepository<Product, Long>{
     @Query(value = "select p.* from Product p inner join Product_Stock ps on p.id = ps.product_id where p.id = ?1 group by p.id having sum(ps.stock)>0", nativeQuery = true)
     Optional<Product> findById(Long id);
 
+    @Query(value = "select p.* from Product p where p.id = ?1", nativeQuery = true)
+    Optional<Product> findByIdAdmin(Long id);
+
     @Query(value = "select p.* from Product p inner join product_stock ps on p.id = ps.product_id where p.description = ?1 group by p.id having sum(ps.stock)>0", nativeQuery = true)
     Product findByDescription(String description); //s
 
