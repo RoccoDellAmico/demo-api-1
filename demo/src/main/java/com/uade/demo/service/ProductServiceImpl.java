@@ -157,7 +157,7 @@ public class ProductServiceImpl implements ProductService {
     public Product updateProduct(Long id, String description, double price, Map<Size, Integer> productStock,
             String club, String league, List<String> photos, ClientCategory clientCategory, TypeOfProduct typeOfProduct,
             int year) {
-        Optional<Product> productOptional = productRepository.findById(id);
+        Optional<Product> productOptional = productRepository.findByIdAdmin(id);
         if(productOptional.isPresent()){
             Product product = productOptional.get();
             product.setDescription(description);
