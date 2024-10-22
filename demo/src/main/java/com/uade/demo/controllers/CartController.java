@@ -97,8 +97,8 @@ public ResponseEntity<Object> createCart(@RequestBody CreateCartRequest createCa
         return ResponseEntity.ok(cart);
     }
 
-    @PutMapping("/user/carts/{cartId}/products/{cartProdutId}/quantity/{newQuantity}/update")
-    public ResponseEntity<Object> updateProductQuantity(@PathVariable Long cartId,
+    @DeleteMapping("/user/carts/{cartId}/products/{cartProdutId}/quantity/{newQuantity}/update")
+    public ResponseEntity<CartDTO> updateProductQuantity(@PathVariable Long cartId,
         @PathVariable Long cartProdutId, @PathVariable int newQuantity) throws ItemNotFoundException {
         CartDTO cart = cartService.updateProductQuantity(cartId, cartProdutId, newQuantity);
         return ResponseEntity.ok(cart);

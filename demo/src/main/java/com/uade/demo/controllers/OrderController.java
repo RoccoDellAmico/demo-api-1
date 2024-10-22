@@ -10,10 +10,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.uade.demo.entity.dto.OrderDTO;
 import com.uade.demo.exceptions.ItemNotFoundException;
 import com.uade.demo.service.OrderService;
+
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/api")
 public class OrderController {
@@ -27,7 +31,7 @@ public class OrderController {
         return ResponseEntity.ok(orders);
     }
 
-    @PostMapping("/user/placeOrder/{cartId}")
+    @DeleteMapping("/user/placeOrder/{cartId}")
     public ResponseEntity<OrderDTO> placeOrder(@PathVariable Long cartId) throws ItemNotFoundException{
         OrderDTO order = orderService.placeOrder(cartId);
         return ResponseEntity.ok(order);
