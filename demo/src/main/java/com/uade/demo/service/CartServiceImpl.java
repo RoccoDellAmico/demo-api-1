@@ -104,6 +104,10 @@ public class CartServiceImpl implements CartService {
         if(hasProduct){
             Product product = cart.getProductByCartProductId(cartProductId);
             CartProduct cartProduct = cart.getCartProductByCartProductId(cartProductId);
+            if(newQuantity == 0){
+                removeProduct(cartId, cartProductId);
+                return mapToCartDTO(cart);
+            }
             if(newQuantity > product.getStockBySize(cartProduct.getSize())){
                 throw new YourCustomException(product.getDescription() + " sin stock disponible");
             }
