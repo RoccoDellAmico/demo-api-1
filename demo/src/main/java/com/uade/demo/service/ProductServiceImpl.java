@@ -99,13 +99,13 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Transactional(rollbackFor = Throwable.class)
-    public Product createProduct(String description, double price, Map<Size, Integer> productStock,
+    public ProductDTO createProduct(String description, double price, Map<Size, Integer> productStock,
     String club, String league, List<String> photos, ClientCategory clientCategory, TypeOfProduct typeOfProduct, 
     int year) {
         Product product = new Product(description, price, productStock, club, league, photos, clientCategory, 
         typeOfProduct, year);
         Product savedProduct = productRepository.save(product);
-        return savedProduct;
+        return mapToProductDTO(savedProduct);
     }
 
     /*@Transactional(rollbackFor = Throwable.class)
@@ -154,7 +154,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product updateProduct(Long id, String description, double price, Map<Size, Integer> productStock,
+    public ProductDTO updateProduct(Long id, String description, double price, Map<Size, Integer> productStock,
             String club, String league, List<String> photos, ClientCategory clientCategory, TypeOfProduct typeOfProduct,
             int year) {
         Optional<Product> productOptional = productRepository.findByIdAdmin(id);
@@ -169,7 +169,7 @@ public class ProductServiceImpl implements ProductService {
             product.setClientCategory(clientCategory);
             product.setTypeOfProduct(typeOfProduct);
             product.setYear(year);
-            return productRepository.save(product);
+            return mapToProductDTO(productRepository.save(product));
         }
         return null;
     }

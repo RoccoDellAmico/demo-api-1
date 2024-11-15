@@ -32,7 +32,7 @@ public interface ProductService {
 
     //public void saveProduct(Product newProduct);
 
-    public Product createProduct(String description, double price, Map<Size, Integer> productStock,
+    public ProductDTO createProduct(String description, double price, Map<Size, Integer> productStock,
     String club, String league, List<String> photos, ClientCategory clientCategory, TypeOfProduct typeOfProduct, 
     int year);
 
@@ -42,7 +42,7 @@ public interface ProductService {
 
     public ProductDTO addProductSize(Long id, Size size, int stock);
 
-    public Product updateProduct(Long id, String description, double price, Map<Size, Integer> productStock,
+    public ProductDTO updateProduct(Long id, String description, double price, Map<Size, Integer> productStock,
         String club, String league, List<String> photos, ClientCategory clientCategory, TypeOfProduct typeOfProduct, 
         int year);
 
