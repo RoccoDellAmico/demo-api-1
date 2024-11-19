@@ -73,7 +73,7 @@ public ResponseEntity<Object> createCart(@RequestBody CreateCartRequest createCa
 }
     
     
-    @PutMapping("/user/carts")
+    @GetMapping("/user/carts")
     public ResponseEntity<CartDTO> addProductToCart(@RequestBody AddProductToCartRequest addProductToCartRequest)
         throws ItemNotFoundException {
         CartDTO cart = cartService.addProduct(addProductToCartRequest.getCartId(), 
@@ -82,14 +82,14 @@ public ResponseEntity<Object> createCart(@RequestBody CreateCartRequest createCa
         return ResponseEntity.ok(cart);
     }
 
-    @PutMapping("/user/carts/{cartId}/products/{productId}/{size}/addOne")
+    @DeleteMapping("/user/carts/{cartId}/products/{productId}/{size}/addOne")
     public ResponseEntity<Object> addOneProduct(@PathVariable Long cartId, 
         @PathVariable Size size, @PathVariable Long productId) throws ItemNotFoundException {
         CartDTO cart = cartService.addOneProduct(cartId, size, productId);
         return ResponseEntity.ok(cart);
     }
 
-    @PutMapping("/user/carts/{cartId}/products/{productId}/{size}/substractOne")
+    @DeleteMapping("/user/carts/{cartId}/products/{productId}/{size}/substractOne")
     public ResponseEntity<Object> substractOneProduct(@PathVariable Long cartId, @PathVariable Long productId,
         @PathVariable Size size) 
         throws ItemNotFoundException {

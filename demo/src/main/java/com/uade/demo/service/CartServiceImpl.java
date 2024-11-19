@@ -129,10 +129,11 @@ public class CartServiceImpl implements CartService {
                 throw new YourCustomException(product.getDescription() + " sin stock disponible");
             }
             cart.updateProductQuantity(productId, size, cart.getCartProductQuantity(productId) + 1);
-            cartRepository.save(cart);
+            cartRepository.save(cart); // Guardar el carrito actualizado
             return mapToCartDTO(cart);
         }
         return mapToCartDTO(cart);
+        //throw new ItemNotFoundException();
     }
 
     // no usar
@@ -141,14 +142,17 @@ public class CartServiceImpl implements CartService {
         Cart cart = cartRepository.findByCartId(cartId).orElseThrow(() -> new ItemNotFoundException());
         boolean hasProduct = cart.hasProduct(productId, size);
         if(hasProduct){
-            cart.updateProductQuantity(productId, size, cart.getCartProductQuantity(productId) - 1);
-            cartRepository.save(cart);
-            if(cart.getCartProductQuantity(productId) == 0){
-                removeProduct(cartId, productId);
-                return mapToCartDTO(cart);
+            int newQuantity = cart.getCartProductQuantity(productId) - 1;
+            if (newQuantity <= 0) {
+                cart.removeProduct(productRepository.findById(productId).orElseThrow(() -> new ItemNotFoundException()));
+            } else {
+                cart.updateProductQuantity(productId, size, newQuantity);
             }
+            cartRepository.save(cart);
+            return mapToCartDTO(cart);
         }
         return mapToCartDTO(cart);
+        //throw new ItemNotFoundException();
     }
 
     @Override
