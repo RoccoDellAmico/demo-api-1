@@ -37,7 +37,7 @@ public class OrderController {
         return ResponseEntity.ok(orders);
     }
 
-    @DeleteMapping("/user/placeOrder/{cartId}")
+    @PostMapping("/user/placeOrder/{cartId}")
     public ResponseEntity<OrderDTO> placeOrder(@PathVariable Long cartId) throws ItemNotFoundException{
         OrderDTO order = orderService.placeOrder(cartId);
         return ResponseEntity.ok(order);
