@@ -73,7 +73,7 @@ public ResponseEntity<Object> createCart(@RequestBody CreateCartRequest createCa
 }
     
     
-    @GetMapping("/user/carts")
+    @PutMapping("/user/carts")
     public ResponseEntity<CartDTO> addProductToCart(@RequestBody AddProductToCartRequest addProductToCartRequest)
         throws ItemNotFoundException {
         CartDTO cart = cartService.addProduct(addProductToCartRequest.getCartId(), 
