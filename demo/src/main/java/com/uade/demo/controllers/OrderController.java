@@ -25,7 +25,7 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
-    @DeleteMapping("/admin/orders")
+    @GetMapping("/admin/orders")
     public ResponseEntity<List<OrderDTO>> getOrders(){
         List<OrderDTO> orders = orderService.getOrders();
         return ResponseEntity.ok(orders);
@@ -37,7 +37,7 @@ public class OrderController {
         return ResponseEntity.ok(orders);
     }
 
-    @DeleteMapping("/user/placeOrder/{cartId}")
+    @PostMapping("/user/placeOrder/{cartId}")
     public ResponseEntity<OrderDTO> placeOrder(@PathVariable Long cartId) throws ItemNotFoundException{
         OrderDTO order = orderService.placeOrder(cartId);
         return ResponseEntity.ok(order);
