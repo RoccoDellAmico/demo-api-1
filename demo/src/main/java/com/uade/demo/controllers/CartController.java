@@ -82,14 +82,14 @@ public ResponseEntity<Object> createCart(@RequestBody CreateCartRequest createCa
         return ResponseEntity.ok(cart);
     }
 
-    @DeleteMapping("/user/carts/{cartId}/products/{productId}/{size}/addOne")
+    @PutMapping("/user/carts/{cartId}/products/{productId}/{size}/addOne")
     public ResponseEntity<Object> addOneProduct(@PathVariable Long cartId, 
         @PathVariable Size size, @PathVariable Long productId) throws ItemNotFoundException {
         CartDTO cart = cartService.addOneProduct(cartId, size, productId);
         return ResponseEntity.ok(cart);
     }
 
-    @DeleteMapping("/user/carts/{cartId}/products/{productId}/{size}/substractOne")
+    @PutMapping("/user/carts/{cartId}/products/{productId}/{size}/substractOne")
     public ResponseEntity<Object> substractOneProduct(@PathVariable Long cartId, @PathVariable Long productId,
         @PathVariable Size size) 
         throws ItemNotFoundException {
