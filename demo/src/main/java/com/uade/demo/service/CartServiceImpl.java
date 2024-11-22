@@ -122,7 +122,9 @@ public class CartServiceImpl implements CartService {
     public CartDTO addOneProduct(Long cartId, Size size,Long productId) throws ItemNotFoundException{
         Cart cart = cartRepository.findByCartId(cartId).orElseThrow(() -> new ItemNotFoundException());
         boolean hasProduct = cart.hasProduct(productId, size);
+        System.out.println("XXXXXXXXXXXXXXXXXXXafueraXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
         if(hasProduct){
+            System.out.println("XXXXXXXXXXXXXadentroXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
             Product product = productRepository.findById(productId).orElseThrow(
                 () -> new ItemNotFoundException());
             if(cart.getCartProductQuantity(productId) + 1 > product.getStockBySize(size)){
@@ -132,8 +134,8 @@ public class CartServiceImpl implements CartService {
             cartRepository.save(cart); // Guardar el carrito actualizado
             return mapToCartDTO(cart);
         }
-        return mapToCartDTO(cart);
-        //throw new ItemNotFoundException();
+        //return mapToCartDTO(cart);
+        throw new ItemNotFoundException();
     }
 
     // no usar

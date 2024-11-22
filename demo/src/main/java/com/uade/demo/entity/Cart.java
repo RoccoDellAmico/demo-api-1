@@ -110,6 +110,8 @@ public class Cart {
 
     public boolean hasProduct(Long productId, Size size){
         for(CartProduct cartProduct : cartProducts){
+            System.out.println(productId);
+            System.out.println(cartProduct.getProduct().getId());
             if(cartProduct.getProduct().getId() == productId && cartProduct.getSize() == size)
                 return true;
         }

@@ -22,7 +22,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>{
     Optional<Product> findByIdAdmin(Long id);
 
     @Query(value = "select p.* from Product p inner join product_stock ps on p.id = ps.product_id where p.description = ?1 group by p.id having sum(ps.stock)>0", nativeQuery = true)
-    Product findByDescription(String description); //s
+    Product findByDescription(String description); 
 
     @Query(value = "SELECT p.* FROM Product p JOIN Product_Category pc ON p.id = pc.product_Id JOIN Category c ON pc.category_Id = c.id inner join product_stock ps on p.id = ps.product_id WHERE c.id = ?1 group by p.id having sum(ps.stock)>0", nativeQuery = true)
     List<Product> findByCategories(Long categoryId); 
