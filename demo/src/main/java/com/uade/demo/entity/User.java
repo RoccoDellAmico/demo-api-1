@@ -45,6 +45,9 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user")
     private List<Token> tokens;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Suggestion> suggestions;
+
     public User() {}
 
     public User(String email, String password, String name, String firstName, String lastName, Role role) {
